@@ -4,17 +4,14 @@ from Playlist import Playlist
 class Player(object):
     volume = 100
     currentTrack = None
-    currentPlaylist = Playlist()
+    _current_playlist = Playlist()
     instance = vlc.Instance()
     mediaplayer = instance.media_list_player_new()
     _instance = None
 
     def __init__(self):
         #self.mediaplayer.event_manager().event_attach(vlc.EventType.MediaPlayerEndReached, self.next)
-        i = self.instance.media_list_new()
-        i.insert_media(self.instance.media_new("/home/mat-bi/Untitled.wma"),0)
-        i.insert_media(self.instance.media_new("/home/mat-bi/tb2.mp3"),1)
-        self.mediaplayer.set_media_list(i)
+        pass
 
     @staticmethod
     def get_instance():
@@ -35,6 +32,19 @@ class Player(object):
         self.mediaplayer.audio_set_volume(value)
         self.volume = value
 
+    @property
+    def current_playlist(self):
+        return self._current_playlist
+
+    @current_playlist.setter
+    def current_playlist(self, value):
+        i = self.instance.media_list_new()
+        l = 0
+        for track in value.current:
+            i.insert_media(self.instance.media_new(track.path), l)
+            l += 1
+        self.mediaplayer.set_media_list(i)
+
     def decrease_volume(self):
         if self.volume > 2:
             self.volume -= 2
@@ -54,6 +64,6 @@ class Player(object):
         self.mediaplayer.stop()
 
     def play_track(self):
-        #if self.currentTrack is None:
-        #    self.mediaplayer.set_mrl(self.currentPlaylist.current().path)
         self.mediaplayer.play()
+
+    
