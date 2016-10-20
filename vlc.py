@@ -7512,7 +7512,7 @@ def libvlc_vlm_get_event_manager(p_instance):
 # Start of footer.py #
 
 # Backward compatibility
-def callbackmethod(callback: object) -> object:
+def callbackmethod(callback):
     """Now obsolete @callbackmethod decorator."""
     return callback
 
