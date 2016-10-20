@@ -1,12 +1,35 @@
-class Playlist:
-    _current = None
+import threading
+from Track import Track
+
+
+class Playlist():
 
     def __init__(self):
         self._list = []
+        self._current = None
+        self.rlock = threading.RLock()
 
     def add_track(self, track):
-        self._list.append(track)
+        with self.rlock:
+            self._list.append(track)
+            if len(self._list) == 1:
+                self._current = self._list[0]
 
-    @property
+    def remove_track(self, track):
+        with self.rlock:
+            self._list.remove(track)
+
+
     def current(self):
-        return self._list
+        with self.rlock:
+            return self._current
+
+    def next(self):
+        with self.rlock:
+            self._current = self._list[self._list.index(self._current) + 1]
+            return self.current()
+
+    def previous(self):
+        with self.rlock:
+            self._current = self._list[self._list.index(self._current) - 1]
+            return self.current()
