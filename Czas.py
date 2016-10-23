@@ -1,6 +1,7 @@
 import threading
 from Ops import Ops
 from Player import Player
+from sys import stderr
 
 
 class Czas(threading.Thread):
@@ -27,6 +28,7 @@ class Czas(threading.Thread):
 
     def run(self):
         kontrolerCzasu = 0
+        dlugosc = 0
         while True:
             with Czas.var:
                 if Czas.dzialanie == Ops.NoOp:
@@ -39,15 +41,17 @@ class Czas(threading.Thread):
                     kontrolerCzasu = 0
                     self.rysuj("00:00")
                     Czas.var.wait()
-                elif kontrolerCzasu <= int(Player.get_instance().current_playlist.current()[
-                                               "length"]) or Czas.dzialanie == Ops.Play or Czas.dzialanie == Ops.ChangeTrack:
+                elif kontrolerCzasu <= dlugosc or Czas.dzialanie == Ops.ChangeTrack:
                     if Czas.dzialanie == Ops.ChangeTrack:
                         kontrolerCzasu = 0
+                        dlugosc = int(Player.get_instance().current_playlist.current()["length"])
+                    stderr.write("{}:{}\n".format(kontrolerCzasu, dlugosc))
+                    stderr.flush()
                     Czas.dzialanie = Ops.Play
                     self.rysuj(
                         "{}:{}".format(self.normalize(int(kontrolerCzasu / 60)), self.normalize(kontrolerCzasu % 60)))
                     kontrolerCzasu += 1
                     Czas.var.wait(1)
-                elif kontrolerCzasu > Czas.dlugosc and Czas.dzialanie != Ops.ChangeTrack:
+                elif kontrolerCzasu > dlugosc and Czas.dzialanie != Ops.ChangeTrack:
                     Czas.dzialanie = Ops.NoOp
                     Czas.var.wait()
