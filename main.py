@@ -8,6 +8,9 @@ import locale
 from Player import Player
 from Playlist import Playlist
 from Track import Track
+from EventManager import *
+from Event import *
+from funkcje import *
 
 locale.setlocale(locale.LC_ALL, "")
 
@@ -60,22 +63,22 @@ calkowitaDlugosc.move(0, 0)
 calkowitaDlugosc.addstr("/ 103:45")  # maksymalnie 8 znaków, w tym "/ "
 calkowitaDlugosc.refresh()
 
-t = "Jakiś bardzo długi fantastyczny tytuł.flac"
-tytulUtworu.addstr(t.encode("utf-8"))
-tytulUtworu.refresh()
+#t = "Jakiś bardzo długi fantastyczny tytuł.flac"
+#tytulUtworu.addstr(t.encode("utf-8"))
+#tytulUtworu.refresh()
 
-odtwarzanie = 1  # chwilowo stąd zmieniamy strzałkę odtwarzania na znak pauzy
+#odtwarzanie = 1  # chwilowo stąd zmieniamy strzałkę odtwarzania na znak pauzy
 
-if odtwarzanie == 0:
-    playPause.move(0, 0)
-    playPause.addstr(pause.encode("utf-8"))
-    playPause.move(0, 1)
-    playPause.addstr(pause.encode("utf-8"))
-    playPause.refresh()
-else:
-    playPause.move(0, 1)
-    playPause.addstr(play.encode("utf-8"))
-    playPause.refresh()
+#if odtwarzanie == 0:
+#    playPause.move(0, 0)
+#    playPause.addstr(pause.encode("utf-8"))
+#    playPause.move(0, 1)
+#    playPause.addstr(pause.encode("utf-8"))
+#    playPause.refresh()
+#else:
+#    playPause.move(0, 1)
+#    playPause.addstr(play.encode("utf-8"))
+#    playPause.refresh()
 
 for i in range(0, wysokoscRamkaPrawa - 1):
     ramkaPrawa.move(i, 0)
@@ -113,13 +116,18 @@ ramkaDol.refresh()
 
 player = Player.get_instance()
 playlist = Playlist()
-playlist.add_track(Track("/home/jg/Pulpit/Plik0.flac"))
-playlist.add_track(Track("/home/jg/Pulpit/Plik1.wma"))
-playlist.add_track(Track("/home/jg/Pulpit/Plik2.wma"))
+playlist.add_track(Track("/home/jg/Pulpit/Plik0.mp3"))
+playlist.add_track(Track("/home/jg/Pulpit/Plik1.mp3"))
+playlist.add_track(Track("/home/jg/Pulpit/Plik2.mp3"))
+EventManager.get_instance().add_event(Event.MediaPlay, zmienTytul, tytulUtworu)
+EventManager.get_instance().add_event(Event.MediaPlay, odtwarzanieZnak, playPause)
+EventManager.get_instance().add_event(Event.MediaPaused, pauzaZnak, playPause)
+EventManager.get_instance().add_event(Event.PlaylistEnded, stopZnak, playPause)
 
 try:
     player.current_playlist = playlist
     player.play_track()
+
     for i in range(0, szerokoscPasek - 1):
         pasekPostepu.move(0, i)
         pasekPostepu.addstr(z.encode("utf-8"))
