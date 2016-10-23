@@ -59,26 +59,6 @@ czasTrwania.addstr("101:00")  # maksymalnie 6 znaków
 czasTrwania.refresh()
 
 calkowitaDlugosc = curses.newwin(1, 9, wysokoscOkna - 2, szerokoscOkna - 9)
-calkowitaDlugosc.move(0, 0)
-calkowitaDlugosc.addstr("/ 103:45")  # maksymalnie 8 znaków, w tym "/ "
-calkowitaDlugosc.refresh()
-
-#t = "Jakiś bardzo długi fantastyczny tytuł.flac"
-#tytulUtworu.addstr(t.encode("utf-8"))
-#tytulUtworu.refresh()
-
-#odtwarzanie = 1  # chwilowo stąd zmieniamy strzałkę odtwarzania na znak pauzy
-
-#if odtwarzanie == 0:
-#    playPause.move(0, 0)
-#    playPause.addstr(pause.encode("utf-8"))
-#    playPause.move(0, 1)
-#    playPause.addstr(pause.encode("utf-8"))
-#    playPause.refresh()
-#else:
-#    playPause.move(0, 1)
-#    playPause.addstr(play.encode("utf-8"))
-#    playPause.refresh()
 
 for i in range(0, wysokoscRamkaPrawa - 1):
     ramkaPrawa.move(i, 0)
@@ -120,6 +100,7 @@ playlist.add_track(Track("/home/jg/Pulpit/Plik0.mp3"))
 playlist.add_track(Track("/home/jg/Pulpit/Plik1.mp3"))
 playlist.add_track(Track("/home/jg/Pulpit/Plik2.mp3"))
 EventManager.get_instance().add_event(Event.MediaPlay, zmienTytul, tytulUtworu)
+EventManager.get_instance().add_event(Event.MediaPlay, ustawCalkowitaDlugosc, calkowitaDlugosc)
 EventManager.get_instance().add_event(Event.MediaPlay, odtwarzanieZnak, playPause)
 EventManager.get_instance().add_event(Event.MediaPaused, pauzaZnak, playPause)
 EventManager.get_instance().add_event(Event.PlaylistEnded, stopZnak, playPause)
