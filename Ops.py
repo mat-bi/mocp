@@ -9,3 +9,4 @@ class Ops(Enum):
     Play = 3
     Pause = 4
     Stop = 5
+    ChangeTrack = 6

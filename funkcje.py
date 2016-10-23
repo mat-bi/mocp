@@ -4,6 +4,7 @@
 import curses
 import time
 import locale
+from Czas import *
 
 from Player import Player
 
@@ -66,25 +67,6 @@ def ustawCalkowitaDlugosc(calkowitaDlugosc):  # ustawia całkowitą długość u
 
 
 def pokazujBiezacyCzas(czasTrwania):    # ustawia biezący czas utworu w oknie wirtualnym "czasTrwania" (przy zdarzeniu "MediaPlay")
-    minuty = 0
-    sekundy = 0
-    kontrolerCzasu = 0
-    dlugosc = int(Player.get_instance().current_playlist.current()["length"])
-    while kontrolerCzasu <= dlugosc:
-        czas = ""
-        if minuty < 10:
-            czas += '0'
-        czas += (str(minuty) + ':')
-        if sekundy < 10:
-            czas += '0'
-        czas += str(sekundy)
-        czasTrwania.clear()
-        czasTrwania.move(0, 0)
-        czasTrwania.addstr(czas)
-        czasTrwania.refresh()
-        kontrolerCzasu += 1
-        sekundy += 1
-        if sekundy == 60:
-            minuty += 1
-            sekundy = 0
-        time.sleep(1)
+    with Czas.var:
+        Czas.dzialanie = Ops.ChangeTrack
+        Czas.var.notify_all()

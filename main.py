@@ -11,6 +11,7 @@ from Track import Track
 from EventManager import *
 from Event import *
 from funkcje import *
+from Czas import *
 
 locale.setlocale(locale.LC_ALL, "")
 
@@ -96,10 +97,12 @@ ramkaDol.refresh()
 
 player = Player.get_instance()
 playlist = Playlist()
+czas = Czas(czasTrwania)
+czas.start()
 # playlist.add_track(Track("/home/mat-bi/Untitled.wma"))
-# playlist.add_track(Track("/home/mat-bi/tb.mp3"))
-# playlist.add_track(Track("/home/mat-bi/tb2.mp3"))
-playlist.add_track(Track("/home/jg/Pulpit/Plik0.mp3"))
+playlist.add_track(Track("/home/mat-bi/tb.mp3"))
+playlist.add_track(Track("/home/mat-bi/tb2.mp3"))
+# playlist.add_track(Track("/home/jg/Pulpit/Plik0.mp3"))
 # playlist.add_track(Track("/home/jg/Pulpit/Plik1.mp3"))
 # playlist.add_track(Track("/home/jg/Pulpit/Plik2.mp3"))
 EventManager.get_instance().add_event(Event.MediaPlay, zmienTytul, tytulUtworu)
