@@ -5,9 +5,11 @@ from mutagen import File
 class Track:
     def __init__(self, path):
         self._path = path
-        self.info = EasyID3(path)
+        try:
+            self.info = EasyID3(path)
+        except:
+            self.info = {"artist": "Nieznany wykonawca", "title": "Nieznany tytul"}
         self.length = File(path).info.length
-
 
     @property
     def path(self):
@@ -21,14 +23,19 @@ class Track:
         if self.info is None:
             return None
         if item == "artist":
-            return self.info.get("artist")
+            if isinstance(self.info, EasyID3):
+                return self.info.get("artist")
+            else:
+                return [self.info["artist"]]
         elif item == "length":
             return self.length
         elif item == "title":
-            return self.info.get("title")
+            if isinstance(self.info, EasyID3):
+                return self.info.get("title")
+            else:
+                return [self.info["title"]]
         else:
             return None
-
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):

@@ -3,7 +3,6 @@ from Track import Track
 
 
 class Playlist():
-
     def __init__(self):
         self._list = []
         self._current = None
@@ -19,17 +18,24 @@ class Playlist():
         with self.rlock:
             self._list.remove(track)
 
-
     def current(self):
         with self.rlock:
             return self._current
 
     def next(self):
         with self.rlock:
-            self._current = self._list[self._list.index(self._current) + 1]
+            index = self._list.index(self._current)
+            if index == len(self._list) - 1:
+                self._current = None
+            else:
+                self._current = self._list[index + 1]
             return self.current()
 
     def previous(self):
         with self.rlock:
-            self._current = self._list[self._list.index(self._current) - 1]
+            index = self._list.index(self._current)
+            if index == 0:
+                self._current = None
+            else:
+                self._current = self._list[index - 1]
             return self.current()

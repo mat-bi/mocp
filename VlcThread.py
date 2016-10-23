@@ -18,9 +18,13 @@ class VlcThread(threading.Thread):
             with self.player.rlock:
                 a = p.get_media().get_state()
                 if a == 6:
-                    p = vlc.MediaPlayer(str(self.player.current_playlist.next()))
-                    p.play()
-                    EventManager.get_instance().trigger_event(Event.MediaPlay)
+                    track = self.player.current_playlist.next()
+                    p = vlc.MediaPlayer(str(track))
+                    if track is None:
+                        EventManager.get_instance().trigger_event(Event.PlaylistEnded)
+                    else:
+                        p.play()
+                        EventManager.get_instance().trigger_event(Event.MediaPlay)
                 elif self.player._op == Ops.NoOp or self.player._op == Ops.Done:
                     pass
                 else:
@@ -42,6 +46,9 @@ class VlcThread(threading.Thread):
                         p.audio_set_volume(self.player.volume)
                         EventManager.get_instance().trigger_event(Event.VolumeChanged)
                         # elif
+                    elif op == Ops.Stop:
+                        p.stop()
+                        EventManager.get_instance().trigger_event(Event.MediaStopped)
 
                         # EventManager.get_instance().trigger_event(Event.Event.MediaEnded)
             try:
