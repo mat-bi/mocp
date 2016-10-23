@@ -54,9 +54,9 @@ blokKoncaPaska.addstr(koniecPaska.encode("utf-8"))
 blokKoncaPaska.refresh()
 
 czasTrwania = curses.newwin(1, 7, wysokoscOkna - 2, szerokoscOkna - 16)
-#czasTrwania.move(0, 0)
-#czasTrwania.addstr("101:00")  # maksymalnie 6 znaków
-#czasTrwania.refresh()
+# czasTrwania.move(0, 0)
+# czasTrwania.addstr("101:00")  # maksymalnie 6 znaków
+# czasTrwania.refresh()
 
 calkowitaDlugosc = curses.newwin(1, 9, wysokoscOkna - 2, szerokoscOkna - 9)
 
@@ -96,13 +96,17 @@ ramkaDol.refresh()
 
 player = Player.get_instance()
 playlist = Playlist()
-playlist.add_track(Track("/home/mat-bi/Untitled.wma"))
-playlist.add_track(Track("/home/mat-bi/tb.mp3"))
-playlist.add_track(Track("/home/mat-bi/tb2.mp3"))
+# playlist.add_track(Track("/home/mat-bi/Untitled.wma"))
+# playlist.add_track(Track("/home/mat-bi/tb.mp3"))
+# playlist.add_track(Track("/home/mat-bi/tb2.mp3"))
+playlist.add_track(Track("/home/jg/Pulpit/Plik0.mp3"))
+# playlist.add_track(Track("/home/jg/Pulpit/Plik1.mp3"))
+# playlist.add_track(Track("/home/jg/Pulpit/Plik2.mp3"))
 EventManager.get_instance().add_event(Event.MediaPlay, zmienTytul, tytulUtworu)
 EventManager.get_instance().add_event(Event.MediaPlay, ustawCalkowitaDlugosc, calkowitaDlugosc)
 EventManager.get_instance().add_event(Event.MediaPlay, odtwarzanieZnak, playPause)
 EventManager.get_instance().add_event(Event.MediaPaused, pauzaZnak, playPause)
+EventManager.get_instance().add_event(Event.MediaStopped, stopZnak, playPause)
 EventManager.get_instance().add_event(Event.PlaylistEnded, stopZnak, playPause)
 EventManager.get_instance().add_event(Event.MediaPlay, pokazujBiezacyCzas, czasTrwania)
 
@@ -127,9 +131,3 @@ except KeyboardInterrupt:
     pass
 finally:
     curses.endwin()
-
-
-
-# playlist.add_track(Track("/home/mat-bi/Untitled.wma"))
-# playlist.add_track(Track("/home/mat-bi/tb2.mp3"))
-# playlist.add_track(Track("/home/mat-bi/tb.mp3"))

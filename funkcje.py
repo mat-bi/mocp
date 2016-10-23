@@ -36,7 +36,7 @@ def odtwarzanieZnak(playPause):  # ustawia znak odtwarzania "play" w oknie wirtu
     playPause.refresh()
 
 
-def stopZnak(playPause):  # ustawia znak odtwarzania "stop" w oknie wirtualnym "playPause" (przy zdarzeniu "PlayListEnded")
+def stopZnak(playPause):  # ustawia znak odtwarzania "stop" w oknie wirtualnym "playPause" (przy zdarzeniu "MediaStopped")
     playPause.clear()
     playPause.move(0, 1)
     playPause.addstr(stop.encode("utf-8"))
