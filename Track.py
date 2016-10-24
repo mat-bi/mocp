@@ -24,14 +24,20 @@ class Track:
             return None
         if item == "artist":
             if isinstance(self.info, EasyID3):
-                return self.info.get("artist")
+                if self.info.get("artist") is None:
+                    return ["Nieznany wykonawca"]
+                else:
+                    return self.info.get("artist")
             else:
                 return [self.info["artist"]]
         elif item == "length":
             return self.length
         elif item == "title":
             if isinstance(self.info, EasyID3):
-                return self.info.get("title")
+                if self.info.get("title") is None:
+                    return [u"Nieznany tytuł"]
+                else:
+                    return self.info.get("title")
             else:
                 return [self.info["title"]]
         else:
