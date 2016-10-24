@@ -45,8 +45,6 @@ class Czas(threading.Thread):
                     if Czas.dzialanie == Ops.ChangeTrack:
                         kontrolerCzasu = 0
                         dlugosc = int(Player.get_instance().current_playlist.current()["length"])
-                    stderr.write("{}:{}\n".format(kontrolerCzasu, dlugosc))
-                    stderr.flush()
                     Czas.dzialanie = Ops.Play
                     self.rysuj(
                         "{}:{}".format(self.normalize(int(kontrolerCzasu / 60)), self.normalize(kontrolerCzasu % 60)))
