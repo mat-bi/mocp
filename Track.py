@@ -31,7 +31,10 @@ class Track:
             else:
                 return [self.info["artist"]]
         elif item == "length":
-            return self.length
+            if self.length is None:
+                return 0
+            else:
+                return self.length
         elif item == "title":
             if isinstance(self.info, EasyID3):
                 if self.info.get("title") is None:

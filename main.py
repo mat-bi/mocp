@@ -12,6 +12,7 @@ from EventManager import *
 from Event import *
 from funkcje import *
 from Czas import *
+from Pasek import *
 
 locale.setlocale(locale.LC_ALL, "")
 
@@ -99,12 +100,15 @@ player = Player.get_instance()
 playlist = Playlist()
 czas = Czas(czasTrwania)
 czas.start()
-playlist.add_track(Track("/home/mat-bi/Untitled.wma"))
+pasek = Pasek(pasekPostepu)
+pasek.start()
+# playlist.add_track(Track("/home/mat-bi/Untitled.wma"))
 # playlist.add_track(Track("/home/mat-bi/tb.mp3"))
 # playlist.add_track(Track("/home/mat-bi/tb2.mp3"))
-# playlist.add_track(Track("/home/jg/Pulpit/Plik0.mp3"))
-# playlist.add_track(Track("/home/jg/Pulpit/Plik1.mp3"))
-playlist.add_track(Track("/home/mat-bi/Pobrane/Plik4.mp3"))
+playlist.add_track(Track("/home/jg/Pulpit/Plik4.mp3"))
+playlist.add_track(Track("/home/jg/Pulpit/Plik0.mp3"))
+playlist.add_track(Track("/home/jg/Pulpit/Plik1.mp3"))
+# playlist.add_track(Track("/home/mat-bi/Pobrane/Plik4.mp3"))
 EventManager.get_instance().add_event(Event.MediaPlay, zmienTytul, tytulUtworu)
 EventManager.get_instance().add_event(Event.MediaPlay, ustawCalkowitaDlugosc, calkowitaDlugosc)
 EventManager.get_instance().add_event(Event.MediaPlay, odtwarzanieZnak, playPause)
@@ -112,12 +116,13 @@ EventManager.get_instance().add_event(Event.MediaPaused, pauzaZnak, playPause)
 EventManager.get_instance().add_event(Event.MediaStopped, stopZnak, playPause)
 EventManager.get_instance().add_event(Event.PlaylistEnded, stopZnak, playPause)
 EventManager.get_instance().add_event(Event.MediaPlay, pokazujBiezacyCzas, czasTrwania)
+EventManager.get_instance().add_event(Event.MediaPlay, pokazujPasek, pasekPostepu)
 
 try:
     player.current_playlist = playlist
     player.play_track()
 
-    for i in range(0, szerokoscPasek - 1):
+    '''for i in range(0, szerokoscPasek - 1):
         pasekPostepu.move(0, i)
         pasekPostepu.addstr(z.encode("utf-8"))
         pasekPostepu.refresh()
@@ -128,7 +133,7 @@ try:
         pasekPostepu.move(0, i)
         pasekPostepu.addstr(z.encode("utf-8"))
         pasekPostepu.refresh()
-        time.sleep(0.01)
+        time.sleep(0.01)'''
     pasekPostepu.getch()
 except KeyboardInterrupt:
     pass

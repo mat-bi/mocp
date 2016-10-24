@@ -5,6 +5,7 @@ import curses
 import time
 import locale
 from Czas import *
+from Pasek import *
 
 from Player import Player
 
@@ -13,7 +14,8 @@ play = u"▶"
 stop = u"■"
 
 
-def zmienTytul(tytulUtworu):  # ustawia tytuł bieżącego utworu w oknie wirtualnym "tytulUtworu" (przy zdarzeniu "MediaPlay")
+def zmienTytul(
+        tytulUtworu):  # ustawia tytuł bieżącego utworu w oknie wirtualnym "tytulUtworu" (przy zdarzeniu "MediaPlay")
     t = str(Player.get_instance().current_playlist.current()["title"][0])
     tytulUtworu.clear()
     tytulUtworu.addstr(t)
@@ -21,7 +23,8 @@ def zmienTytul(tytulUtworu):  # ustawia tytuł bieżącego utworu w oknie wirtua
     return
 
 
-def pauzaZnak(playPause):  # ustawia znak odtwarzania "pause" w oknie wirtualnym "playPause" (przy zdarzeniu "MediaPause")
+def pauzaZnak(
+        playPause):  # ustawia znak odtwarzania "pause" w oknie wirtualnym "playPause" (przy zdarzeniu "MediaPause")
     playPause.clear()
     playPause.move(0, 0)
     playPause.addstr(pause.encode("utf-8"))
@@ -30,21 +33,24 @@ def pauzaZnak(playPause):  # ustawia znak odtwarzania "pause" w oknie wirtualnym
     playPause.refresh()
 
 
-def odtwarzanieZnak(playPause):  # ustawia znak odtwarzania "play" w oknie wirtualnym "playPause" (przy zdarzeniu "MediaPlay")
+def odtwarzanieZnak(
+        playPause):  # ustawia znak odtwarzania "play" w oknie wirtualnym "playPause" (przy zdarzeniu "MediaPlay")
     playPause.clear()
     playPause.move(0, 1)
     playPause.addstr(play.encode("utf-8"))
     playPause.refresh()
 
 
-def stopZnak(playPause):  # ustawia znak odtwarzania "stop" w oknie wirtualnym "playPause" (przy zdarzeniu "MediaStopped")
+def stopZnak(
+        playPause):  # ustawia znak odtwarzania "stop" w oknie wirtualnym "playPause" (przy zdarzeniu "MediaStopped")
     playPause.clear()
     playPause.move(0, 1)
     playPause.addstr(stop.encode("utf-8"))
     playPause.refresh()
 
 
-def ustawCalkowitaDlugosc(calkowitaDlugosc):  # ustawia całkowitą długość utworu w oknie wirtualnym "calkowitaDlugosc" (przy zdarzeniu "MediaPlay")
+def ustawCalkowitaDlugosc(
+        calkowitaDlugosc):  # ustawia całkowitą długość utworu w oknie wirtualnym "calkowitaDlugosc" (przy zdarzeniu "MediaPlay")
     dlugosc = int(Player.get_instance().current_playlist.current()["length"])
     minuty = int(dlugosc / 60)
     sekundy = int(dlugosc % 60)
@@ -66,7 +72,14 @@ def ustawCalkowitaDlugosc(calkowitaDlugosc):  # ustawia całkowitą długość u
     calkowitaDlugosc.refresh()
 
 
-def pokazujBiezacyCzas(czasTrwania):    # ustawia biezący czas utworu w oknie wirtualnym "czasTrwania" (przy zdarzeniu "MediaPlay")
+def pokazujBiezacyCzas(
+        czasTrwania):  # ustawia biezący czas utworu w oknie wirtualnym "czasTrwania" (przy zdarzeniu "MediaPlay")
     with Czas.var:
         Czas.dzialanie = Ops.ChangeTrack
         Czas.var.notify_all()
+
+
+def pokazujPasek(args):
+    with Pasek.var:
+        Pasek.dzialanie = Ops.ChangeTrack
+        Pasek.var.notify_all()
