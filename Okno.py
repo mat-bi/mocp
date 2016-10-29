@@ -11,6 +11,8 @@ def refresh(okno, wysokosc, srodek):
 def wyswietlPliki(pad, lista, kontroler, pojemnosc):
     i = 0
     pom = int(kontroler / pojemnosc)
+    if kontroler > len(lista):
+        kontroler = len(lista) - 1
     for x in lista:
         if i >= pom * pojemnosc and i < (pom + 1) * pojemnosc:
             pad.move(i % pojemnosc, 0)

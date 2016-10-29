@@ -102,15 +102,22 @@ ramkaDol.refresh()
 
 player = Player.get_instance()
 playlist = Playlist()
+os.chdir(os.path.expanduser('~'))
+leweOkno = curses.newpad(wysokoscOkna, srodek - 2)
+kontroler = 0
+listaPom = [os.pardir] + os.listdir(os.curdir)
+lista = filtrujListe(listaPom)
+stosKatalogow = [0]
+wyswietlPliki(leweOkno, lista, kontroler, wysokoscOkna - 4)
 czas = Czas(czasTrwania)
 czas.start()
 pasek = Pasek(pasekPostepu)
 pasek.start()
-playlist.add_track(Track("/home/mat-bi/Untitled.wma"))
-playlist.add_track(Track("/home/mat-bi/tb.mp3"))
-playlist.add_track(Track("/home/mat-bi/tb2.mp3"))
-# playlist.add_track(Track("/home/jg/Pulpit/Plik4.mp3"))
-# playlist.add_track(Track("/home/jg/Pulpit/Plik0.mp3"))
+# playlist.add_track(Track("/home/mat-bi/Untitled.wma"))
+# playlist.add_track(Track("/home/mat-bi/tb.mp3"))
+# playlist.add_track(Track("/home/mat-bi/tb2.mp3"))
+playlist.add_track(Track("/home/jg/Pulpit/Plik4.mp3"))
+playlist.add_track(Track("/home/jg/Pulpit/Plik0.mp3"))
 # playlist.add_track(Track("/home/jg/Pulpit/Plik1.mp3"))
 # playlist.add_track(Track("/home/mat-bi/Pobrane/Plik4.mp3"))
 EventManager.get_instance().add_event(Event.MediaPlay, zmienTytul, tytulUtworu)
@@ -121,15 +128,10 @@ EventManager.get_instance().add_event(Event.MediaStopped, stopZnak, playPause)
 EventManager.get_instance().add_event(Event.PlaylistEnded, stopZnak, playPause)
 EventManager.get_instance().add_event(Event.MediaPlay, pokazujBiezacyCzas, czasTrwania)
 EventManager.get_instance().add_event(Event.MediaPlay, pokazujPasek, pasekPostepu)
-os.chdir(os.path.expanduser('~'))
+
 try:
-    leweOkno = curses.newpad(wysokoscOkna, srodek-2)
     player.current_playlist = playlist
     player.play_track()
-    kontroler = 0
-    listaPom = [os.pardir] + os.listdir(os.curdir)
-    lista = filtrujListe(listaPom)
-    c = pasekPostepu.getch()
     while True:
         c = pasekPostepu.getch()
         leweOkno.clear()
@@ -144,17 +146,15 @@ try:
                 os.chdir(lista[kontroler])
                 listaPom = [os.pardir] + os.listdir(os.curdir)
                 lista = filtrujListe(listaPom)
-                kontroler = 0
+                if kontroler == 0:
+                    kontroler = stosKatalogow.pop()
+                else:
+                    stosKatalogow.append(kontroler)
+                    kontroler = 0
                 wyswietlPliki(leweOkno, lista, kontroler, wysokoscOkna - 4)
-            elif lista[kontroler].endswith(".mp3"):
-                leweOkno.clear()
-                leweOkno.move(0, 0)
-                leweOkno.addstr("Odtwarzanie " + os.path.abspath(lista[kontroler]))
-                refresh(leweOkno, wysokoscOkna, srodek)
-                # leweOkno.refresh(0, 0, 5,5, wysokoscOkna-4, srodek-1)
         # else:
         #    break
-        wyswietlPliki(leweOkno, lista, kontroler, wysokoscOkna-4)
+        wyswietlPliki(leweOkno, lista, kontroler, wysokoscOkna - 4)
 except KeyboardInterrupt:
     pass
 finally:
