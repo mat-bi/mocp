@@ -101,7 +101,7 @@ ramkaGora.refresh()
 ramkaDol.refresh()
 
 player = Player.get_instance()
-playlist = Playlist()
+playlist = Playlist([])
 os.chdir(os.path.expanduser('~'))
 leweOkno = curses.newpad(wysokoscOkna, srodek - 2)
 kontroler = 0
@@ -152,6 +152,23 @@ try:
                     stosKatalogow.append(kontroler)
                     kontroler = 0
                 wyswietlPliki(leweOkno, lista, kontroler, wysokoscOkna - 4)
+            elif os.path.isfile(lista[kontroler]) and czyMuzyczny(lista[kontroler]):
+                '''playlista = Playlist(wybierzMuzyczne(lista))
+                player.stop_track()
+                player.current_playlist = playlista
+                player.play_track'''  # ni UJ-a to nie chce działać - powinno tworzyć listę odtwarzania z plików, które znajdują się w aktualnie przeglądanym katalogu
+                pass
+        elif c == 115:  # zatrzymanie odtwarzania (znak "s")
+            player.stop_track()
+            pasekPostepu.clear()
+            pasekPostepu.refresh()
+        elif c == 32:  # pauza (spacja)
+            player.pause_track()
+            sys.stderr.write(str(player.stan()))
+            sys.stderr.flush()
+        elif c == 113:  # wyjście z programu
+            break
+
         # else:
         #    break
         wyswietlPliki(leweOkno, lista, kontroler, wysokoscOkna - 4)

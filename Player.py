@@ -4,14 +4,13 @@ from Ops import *
 
 
 class Player(object):
-
     _instance = None
     rlock = threading.RLock()
     lock = threading.Lock()
 
     def __init__(self):
         # self.mediaplayer.event_manager().event_attach(vlc.EventType.MediaPlayerEndReached, self.next)
-        self._current_playlist = Playlist()
+        self._current_playlist = Playlist([])
         self._op = Ops.Done
         EventManager.get_instance()
         thread = VlcThread(self)
@@ -84,3 +83,7 @@ class Player(object):
         with self.rlock:
             self._op = Ops.Play
         self.wait()
+
+    def stan(self):
+        with self.rlock:
+            return self._op

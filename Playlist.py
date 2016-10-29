@@ -3,9 +3,12 @@ from Track import Track
 
 
 class Playlist():
-    def __init__(self):
-        self._list = []
-        self._current = None
+    def __init__(self, lista):
+        self._list = lista
+        if len(lista) != 0:
+            self._current = self._list[0]
+        else:
+            self._current = None
         self.rlock = threading.RLock()
 
     def add_track(self, track):

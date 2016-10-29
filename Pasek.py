@@ -23,7 +23,6 @@ class Pasek(threading.Thread):
                     Pasek.var.wait()
                 elif Pasek.dzialanie == Ops.Stop:
                     Pasek.liczbaBlokow = 0
-                    Pasek.pasekPostepu.clear()
                     Pasek.pasekPostepu.move(0, 0)
                 elif Pasek.dzialanie == Ops.Play:
                     czas = int(Player.get_instance().current_playlist.current()["length"])

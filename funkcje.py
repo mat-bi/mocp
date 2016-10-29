@@ -31,6 +31,8 @@ def pauzaZnak(
     playPause.move(0, 1)
     playPause.addstr(pause.encode("utf-8"))
     playPause.refresh()
+    Czas.dzialanie = Ops.Pause
+    Pasek.dzialanie = Ops.Pause
 
 
 def odtwarzanieZnak(
@@ -39,7 +41,8 @@ def odtwarzanieZnak(
     playPause.move(0, 1)
     playPause.addstr(play.encode("utf-8"))
     playPause.refresh()
-
+    Czas.dzialanie = Ops.Play
+    Pasek.dzialanie = Ops.Play
 
 def stopZnak(
         playPause):  # ustawia znak odtwarzania "stop" w oknie wirtualnym "playPause" (przy zdarzeniu "MediaStopped")
@@ -47,6 +50,8 @@ def stopZnak(
     playPause.move(0, 1)
     playPause.addstr(stop.encode("utf-8"))
     playPause.refresh()
+    Czas.dzialanie = Ops.Stop
+    Pasek.dzialanie = Ops.Stop
 
 
 def ustawCalkowitaDlugosc(

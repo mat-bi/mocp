@@ -28,7 +28,7 @@ def wyswietlPliki(pad, lista, kontroler, pojemnosc):
 def filtrujListe(lista):
     nowaLista = []
     for x in lista:
-        if (os.path.isdir(x) or str(x).endswith(".mp3")) and (not str(x).startswith(".") or str(x).startswith("..")):
+        if (os.path.isdir(x) or czyMuzyczny(x)) and (not x.startswith(".") or x.startswith("..")):
             nowaLista += [x]
 
     nowaLista.sort()
@@ -39,7 +39,14 @@ def filtrujListe(lista):
 def wybierzMuzyczne(lista):
     nowaLista = []
     for x in lista:
-        if str(x).endswith(".mp3"):
+        if czyMuzyczny(x):
             nowaLista += [os.path.abspath(x)]
 
     return nowaLista
+
+
+def czyMuzyczny(plik):
+    if plik.endswith(".mp3") or plik.endswith(".flac") or plik.endswith(".ogg"):
+        return True
+    else:
+        return False
