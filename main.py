@@ -4,6 +4,7 @@
 import curses
 import time
 import locale
+import os
 
 from Player import Player
 from Playlist import Playlist
@@ -13,11 +14,14 @@ from Event import *
 from funkcje import *
 from Czas import *
 from Pasek import *
+from Okno import *
 
 locale.setlocale(locale.LC_ALL, "")
 
 okno = curses.initscr()
 curses.curs_set(0)
+curses.noecho()
+curses.cbreak()
 
 (wysokoscOkna, szerokoscOkna) = okno.getmaxyx()
 z = u"█"
@@ -102,12 +106,12 @@ czas = Czas(czasTrwania)
 czas.start()
 pasek = Pasek(pasekPostepu)
 pasek.start()
-# playlist.add_track(Track("/home/mat-bi/Untitled.wma"))
-# playlist.add_track(Track("/home/mat-bi/tb.mp3"))
-# playlist.add_track(Track("/home/mat-bi/tb2.mp3"))
-playlist.add_track(Track("/home/jg/Pulpit/Plik4.mp3"))
-playlist.add_track(Track("/home/jg/Pulpit/Plik0.mp3"))
-playlist.add_track(Track("/home/jg/Pulpit/Plik1.mp3"))
+playlist.add_track(Track("/home/mat-bi/Untitled.wma"))
+playlist.add_track(Track("/home/mat-bi/tb.mp3"))
+playlist.add_track(Track("/home/mat-bi/tb2.mp3"))
+# playlist.add_track(Track("/home/jg/Pulpit/Plik4.mp3"))
+# playlist.add_track(Track("/home/jg/Pulpit/Plik0.mp3"))
+# playlist.add_track(Track("/home/jg/Pulpit/Plik1.mp3"))
 # playlist.add_track(Track("/home/mat-bi/Pobrane/Plik4.mp3"))
 EventManager.get_instance().add_event(Event.MediaPlay, zmienTytul, tytulUtworu)
 EventManager.get_instance().add_event(Event.MediaPlay, ustawCalkowitaDlugosc, calkowitaDlugosc)
@@ -117,24 +121,40 @@ EventManager.get_instance().add_event(Event.MediaStopped, stopZnak, playPause)
 EventManager.get_instance().add_event(Event.PlaylistEnded, stopZnak, playPause)
 EventManager.get_instance().add_event(Event.MediaPlay, pokazujBiezacyCzas, czasTrwania)
 EventManager.get_instance().add_event(Event.MediaPlay, pokazujPasek, pasekPostepu)
-
+os.chdir(os.path.expanduser('~'))
 try:
+    leweOkno = curses.newpad(wysokoscOkna, srodek-2)
     player.current_playlist = playlist
     player.play_track()
-
-    '''for i in range(0, szerokoscPasek - 1):
-        pasekPostepu.move(0, i)
-        pasekPostepu.addstr(z.encode("utf-8"))
-        pasekPostepu.refresh()
-        time.sleep(0.01)
-    time.sleep(4)
-    pasekPostepu.clear()
-    for i in range(0, szerokoscPasek - 1):
-        pasekPostepu.move(0, i)
-        pasekPostepu.addstr(z.encode("utf-8"))
-        pasekPostepu.refresh()
-        time.sleep(0.01)'''
-    pasekPostepu.getch()
+    kontroler = 0
+    listaPom = [os.pardir] + os.listdir(os.curdir)
+    lista = filtrujListe(listaPom)
+    c = pasekPostepu.getch()
+    while True:
+        c = pasekPostepu.getch()
+        leweOkno.clear()
+        if c == 65:
+            if kontroler > 0:
+                kontroler -= 1
+        elif c == 66:
+            if not kontroler >= len(lista) - 1:
+                kontroler += 1
+        elif c == 10:
+            if os.path.isdir(lista[kontroler]):
+                os.chdir(lista[kontroler])
+                listaPom = [os.pardir] + os.listdir(os.curdir)
+                lista = filtrujListe(listaPom)
+                kontroler = 0
+                wyswietlPliki(leweOkno, lista, kontroler, wysokoscOkna - 4)
+            elif lista[kontroler].endswith(".mp3"):
+                leweOkno.clear()
+                leweOkno.move(0, 0)
+                leweOkno.addstr("Odtwarzanie " + os.path.abspath(lista[kontroler]))
+                refresh(leweOkno, wysokoscOkna, srodek)
+                # leweOkno.refresh(0, 0, 5,5, wysokoscOkna-4, srodek-1)
+        # else:
+        #    break
+        wyswietlPliki(leweOkno, lista, kontroler, wysokoscOkna-4)
 except KeyboardInterrupt:
     pass
 finally:

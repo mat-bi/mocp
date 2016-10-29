@@ -77,7 +77,7 @@ def pokazujBiezacyCzas(
     with Czas.var:
         Czas.dzialanie = Ops.ChangeTrack
         Czas.var.notify_all()
-
+        # Czas.var.wait()
 
 def pokazujPasek(args):
     with Pasek.var:

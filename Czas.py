@@ -26,29 +26,41 @@ class Czas(threading.Thread):
         Czas.czas.addstr(co)
         Czas.czas.refresh()
 
+    @staticmethod
+    def number(number):
+        stderr.write("{}\n".format(number))
+        stderr.flush()
+
     def run(self):
         kontrolerCzasu = 0
         dlugosc = 0
         while True:
+            Czas.number(1)
             with Czas.var:
                 if Czas.dzialanie == Ops.NoOp:
+                    Czas.number(2)
                     Czas.var.wait()
                 elif Czas.dzialanie == Ops.Pause:
+                    Czas.number(3)
                     Czas.dzialanie = Ops.NoOp
                     Czas.var.wait()
                 elif Czas.dzialanie == Ops.Stop:
+                    Czas.number(4)
                     Czas.dzialanie = Ops.NoOp
                     kontrolerCzasu = 0
                     self.rysuj("00:00")
                     Czas.var.wait()
                 elif kontrolerCzasu <= dlugosc or Czas.dzialanie == Ops.ChangeTrack:
+                    Czas.number(5)
                     if Czas.dzialanie == Ops.ChangeTrack:
+                        Czas.number(6)
                         kontrolerCzasu = 0
                         dlugosc = int(Player.get_instance().current_playlist.current()["length"])
                     Czas.dzialanie = Ops.Play
                     self.rysuj(
                         "{}:{}".format(self.normalize(int(kontrolerCzasu / 60)), self.normalize(kontrolerCzasu % 60)))
                     kontrolerCzasu += 1
+                    # Czas.var.notify_all()
                     Czas.var.wait(1)
                 elif kontrolerCzasu > dlugosc and Czas.dzialanie != Ops.ChangeTrack:
                     Czas.dzialanie = Ops.NoOp
