@@ -31,8 +31,13 @@ def pauzaZnak(
     playPause.move(0, 1)
     playPause.addstr(pause.encode("utf-8"))
     playPause.refresh()
-    Czas.dzialanie = Ops.Pause
-    Pasek.dzialanie = Ops.Pause
+    with Czas.var:
+        Czas.dzialanie = Ops.Pause
+        Czas.var.notify_all()
+    with Pasek.var:
+        Pasek.dzialanie = Ops.Pause
+        Pasek.var.notify_all()
+
 
 
 def odtwarzanieZnak(
@@ -41,8 +46,12 @@ def odtwarzanieZnak(
     playPause.move(0, 1)
     playPause.addstr(play.encode("utf-8"))
     playPause.refresh()
-    Czas.dzialanie = Ops.Play
-    Pasek.dzialanie = Ops.Play
+    with Czas.var:
+        Czas.dzialanie = Ops.Play
+        Czas.var.notify_all()
+    with Pasek.var:
+        Pasek.dzialanie = Ops.Play
+        Pasek.var.notify_all()
 
 def stopZnak(
         playPause):  # ustawia znak odtwarzania "stop" w oknie wirtualnym "playPause" (przy zdarzeniu "MediaStopped")
@@ -80,7 +89,7 @@ def ustawCalkowitaDlugosc(
 def pokazujBiezacyCzas(
         czasTrwania):  # ustawia biezący czas utworu w oknie wirtualnym "czasTrwania" (przy zdarzeniu "MediaPlay")
     with Czas.var:
-        Czas.dzialanie = Ops.ChangeTrack
+        Czas.dzialanie = Ops.Play
         Czas.var.notify_all()
         # Czas.var.wait()
 
@@ -88,3 +97,9 @@ def pokazujPasek(args):
     with Pasek.var:
         Pasek.dzialanie = Ops.ChangeTrack
         Pasek.var.notify_all()
+
+
+def nowyUtwor(args):
+    with Czas.var:
+        Czas.dzialanie = Ops.ChangeTrack
+        Czas.var.notify_all()

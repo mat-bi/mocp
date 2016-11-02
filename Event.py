@@ -6,6 +6,7 @@ class Event(Enum):
     MediaPlay = 1
     MediaPaused = 2
     MediaStopped = 3
-    PlaylistEnded = 4
-    PlaylistPlay = 5
-    VolumeChanged = 6
+    MediaStarted = 4
+    PlaylistEnded = 5
+    PlaylistPlay = 6
+    VolumeChanged = 7

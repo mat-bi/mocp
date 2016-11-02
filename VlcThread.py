@@ -24,7 +24,11 @@ class VlcThread(threading.Thread):
                         EventManager.get_instance().trigger_event(Event.PlaylistEnded)
                     else:
                         p.play()
-                        EventManager.get_instance().trigger_event(Event.MediaPlay)
+                        EventManager.get_instance().trigger_event(Event.MediaStarted)
+                elif a == 0 and self.player._op == Ops.Play:
+                    self.player._op = Ops.Done
+                    p.play()
+                    EventManager.get_instance().trigger_event(Event.MediaStarted)
                 elif self.player._op == Ops.NoOp or self.player._op == Ops.Done:
                     pass
                 else:
@@ -34,10 +38,16 @@ class VlcThread(threading.Thread):
                         if a != 4:
                             p = vlc.MediaPlayer(str(self.player.current_playlist.current()))
                         p.play()
-                        EventManager.get_instance().trigger_event(Event.MediaPlay)
-                    elif op == Ops.Pause:
+                        if a == 4:
+                            EventManager.get_instance().trigger_event(Event.MediaStarted)
+                        else:
+                            EventManager.get_instance().trigger_event(Event.MediaPlay)
+                    elif op == Ops.Pause and a != 4:
                         p.pause()
                         EventManager.get_instance().trigger_event(Event.MediaPaused)
+                    elif op == Ops.Pause:
+                        p.play()
+                        EventManager.get_instance().trigger_event(Event.MediaPlay)
                     elif op == Ops.ChangePlaylist:
                         p.stop()
                         p = vlc.MediaPlayer(str(self.player.current_playlist.current()))

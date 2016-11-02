@@ -50,7 +50,7 @@ class Czas(threading.Thread):
                     kontrolerCzasu = 0
                     self.rysuj("00:00")
                     Czas.var.wait()
-                elif kontrolerCzasu <= dlugosc or Czas.dzialanie == Ops.ChangeTrack:
+                elif kontrolerCzasu <= dlugosc and Czas.dzialanie == Ops.Play or Czas.dzialanie == Ops.ChangeTrack:
                     Czas.number(5)
                     if Czas.dzialanie == Ops.ChangeTrack:
                         Czas.number(6)

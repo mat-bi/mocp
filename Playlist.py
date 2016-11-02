@@ -1,5 +1,6 @@
 import threading
 from Track import Track
+from sys import stderr
 
 
 class Playlist():
@@ -9,6 +10,8 @@ class Playlist():
             self._current = self._list[0]
         else:
             self._current = None
+        stderr.write(str(lista))
+        stderr.flush()
         self.rlock = threading.RLock()
 
     def add_track(self, track):

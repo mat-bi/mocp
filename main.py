@@ -114,20 +114,22 @@ czas.start()
 pasek = Pasek(pasekPostepu)
 pasek.start()
 # playlist.add_track(Track("/home/mat-bi/Untitled.wma"))
-# playlist.add_track(Track("/home/mat-bi/tb.mp3"))
-# playlist.add_track(Track("/home/mat-bi/tb2.mp3"))
-playlist.add_track(Track("/home/jg/Pulpit/Plik4.mp3"))
-playlist.add_track(Track("/home/jg/Pulpit/Plik0.mp3"))
+playlist.add_track(Track("/home/mat-bi/tb.mp3"))
+playlist.add_track(Track("/home/mat-bi/tb2.mp3"))
+# playlist.add_track(Track("/home/jg/Pulpit/Plik4.mp3"))
+# playlist.add_track(Track("/home/jg/Pulpit/Plik0.mp3"))
 # playlist.add_track(Track("/home/jg/Pulpit/Plik1.mp3"))
 # playlist.add_track(Track("/home/mat-bi/Pobrane/Plik4.mp3"))
-EventManager.get_instance().add_event(Event.MediaPlay, zmienTytul, tytulUtworu)
-EventManager.get_instance().add_event(Event.MediaPlay, ustawCalkowitaDlugosc, calkowitaDlugosc)
+EventManager.get_instance().add_event(Event.MediaStarted, zmienTytul, tytulUtworu)
+EventManager.get_instance().add_event(Event.MediaStarted, ustawCalkowitaDlugosc, calkowitaDlugosc)
 EventManager.get_instance().add_event(Event.MediaPlay, odtwarzanieZnak, playPause)
+EventManager.get_instance().add_event(Event.MediaStarted, odtwarzanieZnak, playPause)
 EventManager.get_instance().add_event(Event.MediaPaused, pauzaZnak, playPause)
 EventManager.get_instance().add_event(Event.MediaStopped, stopZnak, playPause)
 EventManager.get_instance().add_event(Event.PlaylistEnded, stopZnak, playPause)
 EventManager.get_instance().add_event(Event.MediaPlay, pokazujBiezacyCzas, czasTrwania)
-EventManager.get_instance().add_event(Event.MediaPlay, pokazujPasek, pasekPostepu)
+EventManager.get_instance().add_event(Event.MediaStarted, pokazujPasek, pasekPostepu)
+EventManager.get_instance().add_event(Event.MediaStarted, nowyUtwor)
 
 try:
     player.current_playlist = playlist
@@ -153,10 +155,10 @@ try:
                     kontroler = 0
                 wyswietlPliki(leweOkno, lista, kontroler, wysokoscOkna - 4)
             elif os.path.isfile(lista[kontroler]) and czyMuzyczny(lista[kontroler]):
-                '''playlista = Playlist(wybierzMuzyczne(lista))
+                playlista = Playlist(wybierzMuzyczne(lista))
                 player.stop_track()
                 player.current_playlist = playlista
-                player.play_track'''  # ni UJ-a to nie chce działać - powinno tworzyć listę odtwarzania z plików, które znajdują się w aktualnie przeglądanym katalogu
+                player.play_track()  # ni UJ-a to nie chce działać - powinno tworzyć listę odtwarzania z plików, które znajdują się w aktualnie przeglądanym katalogu
                 pass
         elif c == 115:  # zatrzymanie odtwarzania (znak "s")
             player.stop_track()
