@@ -2,27 +2,29 @@ import curses
 
 import locale
 import os
-
+from sys import stderr
 
 def refresh(okno, wysokosc, srodek):
     okno.refresh(0, 0, 1, 2, wysokosc - 2, srodek - 1)
 
 
-def wyswietlPliki(pad, lista, kontroler, pojemnosc):
+def wyswietlPliki(pad, lista, kontroler):
+    pad.clear()
     i = 0
     (wys, szer) = pad.getmaxyx()
+    pojemnosc = wys - 2
     pom = int(kontroler / pojemnosc)
     if kontroler > len(lista):
         kontroler = len(lista) - 1
     for x in lista:
-        if i >= pom * pojemnosc and i < (pom + 1) * pojemnosc:
+        if pom * pojemnosc <= i < (pom + 1) * pojemnosc:
             pad.move(i % pojemnosc, 0)
             if i == kontroler:
                 pad.addstr(str(x)[0:szer - 1], curses.A_STANDOUT)
             else:
                 pad.addstr(str(x)[0:szer - 1])
         i += 1
-    refresh(pad, 24, 76)
+    refresh(pad, wys, szer)
     # pad.refresh(0, 0, 0, 0, 20, 75)
 
 

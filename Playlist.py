@@ -6,11 +6,11 @@ from sys import stderr
 class Playlist():
     def __init__(self, lista):
         self._list = lista
-        if len(lista) != 0:
+        if len(lista) > 0:
             self._current = self._list[0]
         else:
             self._current = None
-        stderr.write(str(lista))
+        stderr.write(str(lista)+'\n')
         stderr.flush()
         self.rlock = threading.RLock()
 

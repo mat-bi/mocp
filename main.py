@@ -103,12 +103,15 @@ ramkaDol.refresh()
 player = Player.get_instance()
 playlist = Playlist([])
 os.chdir(os.path.expanduser('~'))
-leweOkno = curses.newpad(wysokoscOkna, srodek - 2)
+leweOkno = curses.newpad(wysokoscOkna - 2, srodek - 2)
+(wysokoscLeweOkno, szerokoscLeweOkno) = leweOkno.getmaxyx()
 kontroler = 0
 listaPom = [os.pardir] + os.listdir(os.curdir)
 lista = filtrujListe(listaPom)
+stderr.write(str(lista))
+stderr.flush()
 stosKatalogow = [0]
-wyswietlPliki(leweOkno, lista, kontroler, wysokoscOkna - 4)
+wyswietlPliki(leweOkno, lista, kontroler)
 czas = Czas(czasTrwania)
 czas.start()
 pasek = Pasek(pasekPostepu)
@@ -136,15 +139,14 @@ try:
     player.play_track()
     while True:
         c = pasekPostepu.getch()
-        leweOkno.clear()
         if c == 65:  # strzałka w górę
             if kontroler > 0:
                 kontroler -= 1
-            wyswietlPliki(leweOkno, lista, kontroler, wysokoscOkna - 4)
+                wyswietlPliki(leweOkno, lista, kontroler)
         elif c == 66:  # strzałka w dół
             if not kontroler >= len(lista) - 1:
                 kontroler += 1
-            wyswietlPliki(leweOkno, lista, kontroler, wysokoscOkna - 4)
+                wyswietlPliki(leweOkno, lista, kontroler)
         elif c == 10:  # Enter
             if os.path.isdir(lista[kontroler]):
                 os.chdir(lista[kontroler])
@@ -155,7 +157,7 @@ try:
                 else:
                     stosKatalogow.append(kontroler)
                     kontroler = 0
-                wyswietlPliki(leweOkno, lista, kontroler, wysokoscOkna - 4)
+                wyswietlPliki(leweOkno, lista, kontroler)
             elif os.path.isfile(lista[kontroler]) and czyMuzyczny(lista[kontroler]):
                 playlista = Playlist(wybierzMuzyczne(lista[kontroler:len(lista) + 1]))
                 player.stop_track()
@@ -168,11 +170,10 @@ try:
             pasekPostepu.refresh()
         elif c == 32:  # pauza (spacja)
             player.pause_track()
-            sys.stderr.write(str(player.stan()))
-            sys.stderr.flush()
+            # sys.stderr.write(str(player.stan()))
+            # sys.stderr.flush()
         elif c == 113:  # wyjście z programu
             break
-            # wyswietlPliki(leweOkno, lista, kontroler, wysokoscOkna - 4)
 except KeyboardInterrupt:
     pass
 finally:
