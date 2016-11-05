@@ -10,6 +10,7 @@ def refresh(okno, wysokosc, srodek):
 
 def wyswietlPliki(pad, lista, kontroler, pojemnosc):
     i = 0
+    (wys, szer) = pad.getmaxyx()
     pom = int(kontroler / pojemnosc)
     if kontroler > len(lista):
         kontroler = len(lista) - 1
@@ -17,9 +18,9 @@ def wyswietlPliki(pad, lista, kontroler, pojemnosc):
         if i >= pom * pojemnosc and i < (pom + 1) * pojemnosc:
             pad.move(i % pojemnosc, 0)
             if i == kontroler:
-                pad.addstr(str(x), curses.A_STANDOUT)
+                pad.addstr(str(x)[0:szer - 1], curses.A_STANDOUT)
             else:
-                pad.addstr(str(x))
+                pad.addstr(str(x)[0:szer - 1])
         i += 1
     refresh(pad, 24, 76)
     # pad.refresh(0, 0, 0, 0, 20, 75)

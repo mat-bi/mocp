@@ -114,10 +114,10 @@ czas.start()
 pasek = Pasek(pasekPostepu)
 pasek.start()
 # playlist.add_track(Track("/home/mat-bi/Untitled.wma"))
-playlist.add_track(Track("/home/mat-bi/tb.mp3"))
-playlist.add_track(Track("/home/mat-bi/tb2.mp3"))
-# playlist.add_track(Track("/home/jg/Pulpit/Plik4.mp3"))
-# playlist.add_track(Track("/home/jg/Pulpit/Plik0.mp3"))
+# playlist.add_track(Track("/home/mat-bi/tb.mp3"))
+# playlist.add_track(Track("/home/mat-bi/tb2.mp3"))
+playlist.add_track(Track("/home/jg/Pulpit/Plik4.mp3"))
+playlist.add_track(Track("/home/jg/Pulpit/Plik0.mp3"))
 # playlist.add_track(Track("/home/jg/Pulpit/Plik1.mp3"))
 # playlist.add_track(Track("/home/mat-bi/Pobrane/Plik4.mp3"))
 EventManager.get_instance().add_event(Event.MediaStarted, zmienTytul, tytulUtworu)
@@ -137,13 +137,15 @@ try:
     while True:
         c = pasekPostepu.getch()
         leweOkno.clear()
-        if c == 65:
+        if c == 65:  # strzałka w górę
             if kontroler > 0:
                 kontroler -= 1
-        elif c == 66:
+            wyswietlPliki(leweOkno, lista, kontroler, wysokoscOkna - 4)
+        elif c == 66:  # strzałka w dół
             if not kontroler >= len(lista) - 1:
                 kontroler += 1
-        elif c == 10:
+            wyswietlPliki(leweOkno, lista, kontroler, wysokoscOkna - 4)
+        elif c == 10:  # Enter
             if os.path.isdir(lista[kontroler]):
                 os.chdir(lista[kontroler])
                 listaPom = [os.pardir] + os.listdir(os.curdir)
@@ -155,10 +157,10 @@ try:
                     kontroler = 0
                 wyswietlPliki(leweOkno, lista, kontroler, wysokoscOkna - 4)
             elif os.path.isfile(lista[kontroler]) and czyMuzyczny(lista[kontroler]):
-                playlista = Playlist(wybierzMuzyczne(lista))
+                playlista = Playlist(wybierzMuzyczne(lista[kontroler:len(lista) + 1]))
                 player.stop_track()
                 player.current_playlist = playlista
-                player.play_track()  # ni UJ-a to nie chce działać - powinno tworzyć listę odtwarzania z plików, które znajdują się w aktualnie przeglądanym katalogu
+                player.play_track()
                 pass
         elif c == 115:  # zatrzymanie odtwarzania (znak "s")
             player.stop_track()
@@ -170,10 +172,7 @@ try:
             sys.stderr.flush()
         elif c == 113:  # wyjście z programu
             break
-
-        # else:
-        #    break
-        wyswietlPliki(leweOkno, lista, kontroler, wysokoscOkna - 4)
+            # wyswietlPliki(leweOkno, lista, kontroler, wysokoscOkna - 4)
 except KeyboardInterrupt:
     pass
 finally:
