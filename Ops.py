@@ -10,3 +10,4 @@ class Ops(Enum):
     Pause = 4
     Stop = 5
     ChangeTrack = 6
+    TimeChanged = 7

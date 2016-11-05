@@ -59,6 +59,8 @@ class VlcThread(threading.Thread):
                     elif op == Ops.Stop:
                         p.stop()
                         EventManager.get_instance().trigger_event(Event.MediaStopped)
+                    elif op == Ops.TimeChanged:
+                        p.set_position(self.player.time / self.player.current_playlist.current()["length"])
 
                         # EventManager.get_instance().trigger_event(Event.Event.MediaEnded)
             try:

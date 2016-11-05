@@ -174,6 +174,8 @@ try:
             # sys.stderr.flush()
         elif c == 113:  # wyjście z programu
             break
+        elif c == ord('a'):
+            player.set_time(5)
 except KeyboardInterrupt:
     pass
 finally:

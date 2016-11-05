@@ -7,6 +7,7 @@ class Player(object):
     _instance = None
     rlock = threading.RLock()
     lock = threading.Lock()
+    time = 0
 
     def __init__(self):
         # self.mediaplayer.event_manager().event_attach(vlc.EventType.MediaPlayerEndReached, self.next)
@@ -87,3 +88,9 @@ class Player(object):
     def stan(self):
         with self.rlock:
             return self._op
+
+    def set_time(self, time):
+        with self.rlock:
+            self._op = Ops.TimeChanged
+            self.time = time
+        self.wait()
