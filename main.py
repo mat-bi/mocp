@@ -133,6 +133,8 @@ EventManager.get_instance().add_event(Event.PlaylistEnded, stopZnak, playPause)
 EventManager.get_instance().add_event(Event.MediaPlay, pokazujBiezacyCzas, czasTrwania)
 EventManager.get_instance().add_event(Event.MediaStarted, pokazujPasek, pasekPostepu)
 EventManager.get_instance().add_event(Event.MediaStarted, nowyUtwor)
+EventManager.get_instance().add_event(Event.TimeChanged, ustawPrzestawionyCzas)
+EventManager.get_instance().add_event(Event.TimeChanged, ustawPrzestawionyPasek)
 
 try:
     player.current_playlist = playlist

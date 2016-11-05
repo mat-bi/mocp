@@ -9,6 +9,7 @@ class Pasek(threading.Thread):
     dzialanie = Ops.NoOp
     liczbaBlokow = 0
     blok = u"█"
+    event_table = None
 
     def __init__(self, pasekPostepu):
         threading.Thread.__init__(self)
@@ -26,7 +27,7 @@ class Pasek(threading.Thread):
                     Pasek.pasekPostepu.move(0, 0)
                     Pasek.var.wait()
                 elif Pasek.dzialanie == Ops.Play:
-                    czas = int(Player.get_instance().current_playlist.current()["length"])
+                    czas = int(self.event_table["length"])
                     facet_wait = czas / szerokoscPasek
                     Pasek.pasekPostepu.move(0, Pasek.liczbaBlokow)
                     Pasek.pasekPostepu.addstr(Pasek.blok.encode("utf-8"))
@@ -38,11 +39,19 @@ class Pasek(threading.Thread):
                     Pasek.liczbaBlokow = 0
                     Pasek.pasekPostepu.clear()
                     Pasek.dzialanie = Ops.Play
-                    czas = int(Player.get_instance().current_playlist.current()["length"])
+                    czas = int(self.event_table["length"])
                     facet_wait = czas / szerokoscPasek
                     Pasek.pasekPostepu.move(0, 0)
                     Pasek.pasekPostepu.addstr(Pasek.blok.encode("utf-8"))
                     Pasek.pasekPostepu.refresh()
                     if Pasek.liczbaBlokow + 1 < szerokoscPasek - 1:
                         Pasek.liczbaBlokow += 1
+                    Pasek.var.wait(facet_wait)
+                elif Pasek.dzialanie == Ops.TimeChanged:
+                    facet_wait = int(self.event_table["length"]) / szerokoscPasek
+                    Pasek.pasekPostepu.move(0, 0)
+                    Pasek.pasekPostepu.addstr(
+                        int(self.event_table["time"] / self.event_table["length"]) * Pasek.blok.encode("utf-8"))
+                    Pasek.pasekPostepu.refresh()
+                    Pasek.dzialanie = Ops.Play
                     Pasek.var.wait(facet_wait)

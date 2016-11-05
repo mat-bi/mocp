@@ -26,8 +26,12 @@ class EventManager:
         with EventManager.rlock:
             self.list[type].append({'function': function, 'args': args})
 
-    def trigger_event(self, type):
+    def trigger_event(self, type, args=None):
         with EventManager.rlock:
             l = self.list[type]
             for t in l:
-                t["function"](t["args"])
+                if args is None:
+                    args = {}
+                list = args
+                list["user"] = t["args"]
+                t["function"](list)

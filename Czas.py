@@ -8,6 +8,7 @@ class Czas(threading.Thread):
     var = threading.Condition()
     czas = None
     dzialanie = Ops.NoOp
+    event_table = None
 
     def __init__(self, czas):
         threading.Thread.__init__(self)
@@ -55,7 +56,7 @@ class Czas(threading.Thread):
                     if Czas.dzialanie == Ops.ChangeTrack:
                         # Czas.number(6)
                         kontrolerCzasu = 0
-                        dlugosc = int(Player.get_instance().current_playlist.current()["length"])
+                        dlugosc = int(self.event_table["length"])
                     Czas.dzialanie = Ops.Play
                     self.rysuj(
                         "{}:{}".format(self.normalize(int(kontrolerCzasu / 60)), self.normalize(kontrolerCzasu % 60)))
@@ -65,3 +66,10 @@ class Czas(threading.Thread):
                 elif kontrolerCzasu > dlugosc and Czas.dzialanie != Ops.ChangeTrack:
                     Czas.dzialanie = Ops.NoOp
                     Czas.var.wait()
+                elif Czas.dzialanie == Ops.TimeChanged:
+                    self.rysuj("{}:{}".format(
+                        self.normalize(int(self.event_table["time"] / 60)),
+                        self.normalize(self.event_table["time"] % 60)))
+                    Czas.dzialanie = Ops.Play
+                    kontrolerCzasu = self.event_table["time"]
+                    Czas.var.wait(1)

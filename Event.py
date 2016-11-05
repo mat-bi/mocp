@@ -10,3 +10,4 @@ class Event(Enum):
     PlaylistEnded = 5
     PlaylistPlay = 6
     VolumeChanged = 7
+    TimeChanged = 8
