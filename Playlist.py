@@ -5,12 +5,18 @@ from sys import stderr
 
 class Playlist():
     def __init__(self, lista):
-        self._list = lista
+        list = []
+        for i in lista:
+            if isinstance(i, Track):
+                list.append(i)
+            else:
+                list.append(Track(i))
+        self._list = list
         if len(lista) > 0:
             self._current = self._list[0]
         else:
             self._current = None
-        stderr.write(str(lista)+'\n')
+        stderr.write("{}\n".format(str(lista)))
         stderr.flush()
         self.rlock = threading.RLock()
 
