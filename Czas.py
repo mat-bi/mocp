@@ -2,6 +2,7 @@ import threading
 from Ops import Ops
 from Player import Player
 from sys import stderr
+import funkcje
 
 
 class Czas(threading.Thread):
@@ -22,10 +23,11 @@ class Czas(threading.Thread):
             return str(liczba)
 
     def rysuj(self, co):
-        Czas.czas.clear()
-        Czas.czas.move(0, 0)
-        Czas.czas.addstr(co)
-        Czas.czas.refresh()
+        with funkcje.curses_mutex:
+            Czas.czas.clear()
+            Czas.czas.move(0, 0)
+            Czas.czas.addstr(co)
+            Czas.czas.refresh()
 
     @staticmethod
     def number(number):

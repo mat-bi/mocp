@@ -22,7 +22,6 @@ okno = curses.initscr()
 curses.curs_set(0)
 curses.noecho()
 curses.cbreak()
-
 (wysokoscOkna, szerokoscOkna) = okno.getmaxyx()
 z = u"█"
 ramkaPion = u"┃"
@@ -171,8 +170,9 @@ try:
                 pass
         elif c == 115:  # zatrzymanie odtwarzania (znak "s")
             player.stop_track()
-            pasekPostepu.clear()
-            pasekPostepu.refresh()
+            with funkcje.curses_mutex:
+                pasekPostepu.clear()
+                pasekPostepu.refresh()
         elif c == 32:  # pauza (spacja)
             player.pause_track()
             # sys.stderr.write(str(player.stan()))

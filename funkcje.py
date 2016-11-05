@@ -9,6 +9,8 @@ from Pasek import *
 
 from Player import Player
 
+curses_mutex = threading.RLock()
+
 pause = u"▐"
 play = u"▶"
 stop = u"■"
@@ -18,21 +20,22 @@ def zmienTytul(
         args):  # ustawia tytuł bieżącego utworu w oknie wirtualnym "tytulUtworu" (przy zdarzeniu "MediaPlay")
     tytulUtworu = args["user"]
     t = args["title"][0]
-    tytulUtworu.clear()
-    tytulUtworu.addstr(t)
-    tytulUtworu.refresh()
-    return
+    with curses_mutex:
+        tytulUtworu.clear()
+        tytulUtworu.addstr(t)
+        tytulUtworu.refresh()
 
 
 def pauzaZnak(
         args):  # ustawia znak odtwarzania "pause" w oknie wirtualnym "playPause" (przy zdarzeniu "MediaPause")
     playPause = args["user"]
-    playPause.clear()
-    playPause.move(0, 0)
-    playPause.addstr(pause.encode("utf-8"))
-    playPause.move(0, 1)
-    playPause.addstr(pause.encode("utf-8"))
-    playPause.refresh()
+    with curses_mutex:
+        playPause.clear()
+        playPause.move(0, 0)
+        playPause.addstr(pause.encode("utf-8"))
+        playPause.move(0, 1)
+        playPause.addstr(pause.encode("utf-8"))
+        playPause.refresh()
     with Czas.var:
         Czas.dzialanie = Ops.Pause
         Czas.event_table = args
@@ -47,10 +50,11 @@ def pauzaZnak(
 def odtwarzanieZnak(
         args):  # ustawia znak odtwarzania "play" w oknie wirtualnym "playPause" (przy zdarzeniu "MediaPlay")
     playPause = args["user"]
-    playPause.clear()
-    playPause.move(0, 1)
-    playPause.addstr(play.encode("utf-8"))
-    playPause.refresh()
+    with curses_mutex:
+        playPause.clear()
+        playPause.move(0, 1)
+        playPause.addstr(play.encode("utf-8"))
+        playPause.refresh()
     with Czas.var:
         Czas.dzialanie = Ops.Play
         Czas.event_table = args
@@ -63,10 +67,11 @@ def odtwarzanieZnak(
 def stopZnak(
         args):  # ustawia znak odtwarzania "stop" w oknie wirtualnym "playPause" (przy zdarzeniu "MediaStopped")
     playPause = args["user"]
-    playPause.clear()
-    playPause.move(0, 1)
-    playPause.addstr(stop.encode("utf-8"))
-    playPause.refresh()
+    with curses_mutex:
+        playPause.clear()
+        playPause.move(0, 1)
+        playPause.addstr(stop.encode("utf-8"))
+        playPause.refresh()
     with Czas.var:
         Czas.dzialanie = Ops.Stop
         Czas.event_table = args
@@ -95,9 +100,10 @@ def ustawCalkowitaDlugosc(
 
     dlugosc = "/ " + minutyString + ":" + sekundyString
     calkowitaDlugosc = args["user"]
-    calkowitaDlugosc.move(0, 0)
-    calkowitaDlugosc.addstr(dlugosc)
-    calkowitaDlugosc.refresh()
+    with curses_mutex:
+        calkowitaDlugosc.move(0, 0)
+        calkowitaDlugosc.addstr(dlugosc)
+        calkowitaDlugosc.refresh()
 
 
 def pokazujBiezacyCzas(
