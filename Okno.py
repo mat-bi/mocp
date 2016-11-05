@@ -49,7 +49,7 @@ def wybierzMuzyczne(lista):
 
 
 def czyMuzyczny(plik):
-    if plik.endswith(".mp3") or plik.endswith(".flac") or plik.endswith(".ogg"):
+    if os.path.isfile(plik) and (plik.endswith(".mp3") or plik.endswith(".flac") or plik.endswith(".ogg")):
         return True
     else:
         return False

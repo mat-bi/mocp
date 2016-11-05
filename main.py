@@ -101,15 +101,17 @@ ramkaGora.refresh()
 ramkaDol.refresh()
 
 player = Player.get_instance()
-playlist = Playlist([])
+# playlist = Playlist([])
 os.chdir(os.path.expanduser('~'))
 leweOkno = curses.newpad(wysokoscOkna - 2, srodek - 2)
 (wysokoscLeweOkno, szerokoscLeweOkno) = leweOkno.getmaxyx()
+praweOkno = curses.newpad(wysokoscOkna - 2, srodek - 2)
+(wysokoscPraweOkno, szerokoscPraweOkno) = leweOkno.getmaxyx()
 kontroler = 0
 listaPom = [os.pardir] + os.listdir(os.curdir)
 lista = filtrujListe(listaPom)
-stderr.write(str(lista))
-stderr.flush()
+# stderr.write(str(lista))
+# stderr.flush()
 stosKatalogow = [0]
 wyswietlPliki(leweOkno, lista, kontroler)
 czas = Czas(czasTrwania)
@@ -161,7 +163,8 @@ try:
                     kontroler = 0
                 wyswietlPliki(leweOkno, lista, kontroler)
             elif os.path.isfile(lista[kontroler]) and czyMuzyczny(lista[kontroler]):
-                playlista = Playlist(wybierzMuzyczne(lista[kontroler:len(lista) + 1]))
+                listaOdtw = wybierzMuzyczne(lista[kontroler:len(lista) + 1])
+                playlista = Playlist(listaOdtw)
                 player.stop_track()
                 player.current_playlist = playlista
                 player.play_track()
@@ -175,10 +178,12 @@ try:
             # sys.stderr.write(str(player.stan()))
             # sys.stderr.flush()
         elif c == 113:  # wyjście z programu
+            stderr.flush()
             break
-        elif c == ord('a'):
+        elif c == 68:
             player.set_time(5)
 except KeyboardInterrupt:
     pass
 finally:
+    stderr.flush()
     curses.endwin()

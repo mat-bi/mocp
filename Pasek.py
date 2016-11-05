@@ -10,6 +10,7 @@ class Pasek(threading.Thread):
     liczbaBlokow = 0
     blok = u"█"
     event_table = None
+    pasekPostepu = None
 
     def __init__(self, pasekPostepu):
         threading.Thread.__init__(self)

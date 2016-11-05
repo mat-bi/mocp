@@ -89,8 +89,15 @@ class Player(object):
         with self.rlock:
             return self._op
 
-    def set_time(self, time):
+    def set_time(self, setTime):
         with self.rlock:
             self._op = Ops.TimeChanged
-            self.time = time
+            if setTime > 0:
+                self.time = setTime
+            else:
+                self.time = 0
         self.wait()
+
+    def get_time(self):
+        with self.rlock:
+            return self.time

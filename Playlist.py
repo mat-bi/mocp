@@ -16,7 +16,7 @@ class Playlist():
             self._current = self._list[0]
         else:
             self._current = None
-        stderr.write("{}\n".format(str(lista)))
+        # stderr.write("{}\n".format(str(lista)))
         stderr.flush()
         self.rlock = threading.RLock()
 
