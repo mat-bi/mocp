@@ -48,10 +48,24 @@ class Pasek(threading.Thread):
                         Pasek.liczbaBlokow += 1
                     Pasek.var.wait(facet_wait)
                 elif Pasek.dzialanie == Ops.TimeChanged:
-                    facet_wait = int(self.event_table["length"]) / szerokoscPasek
-                    Pasek.pasekPostepu.move(0, 0)
-                    Pasek.pasekPostepu.addstr(
-                        int(self.event_table["time"] / self.event_table["length"]) * Pasek.blok.encode("utf-8"))
+                    czas = int(self.event_table["length"])
+                    facet_wait = czas / szerokoscPasek
+                    czasUstawiany = int(self.event_table["time"])
+                    pom = int(czasUstawiany / czas * szerokoscPasek)
+
+                    if pom < Pasek.liczbaBlokow:
+                        i = 0
+                        Pasek.pasekPostepu.clear()
+                    else:
+                        i = Pasek.liczbaBlokow
+
+                    Pasek.liczbaBlokow = pom
+
+                    while i <= Pasek.liczbaBlokow:
+                        Pasek.pasekPostepu.move(0, i)
+                        Pasek.pasekPostepu.addstr(Pasek.blok.encode("utf-8"))
+                        i += 1
+
                     Pasek.pasekPostepu.refresh()
                     Pasek.dzialanie = Ops.Play
                     Pasek.var.wait(facet_wait)

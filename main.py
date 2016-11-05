@@ -117,8 +117,8 @@ czas.start()
 pasek = Pasek(pasekPostepu)
 pasek.start()
 # playlist.add_track(Track("/home/mat-bi/Untitled.wma"))
-playlist.add_track(Track("/home/mat-bi/tb.mp3"))
-playlist.add_track(Track("/home/mat-bi/tb2.mp3"))
+# playlist.add_track(Track("/home/mat-bi/tb.mp3"))
+# playlist.add_track(Track("/home/mat-bi/tb2.mp3"))
 # playlist.add_track(Track("/home/jg/Pulpit/Plik4.mp3"))
 # playlist.add_track(Track("/home/jg/Pulpit/Plik0.mp3"))
 # playlist.add_track(Track("/home/jg/Pulpit/Plik1.mp3"))
@@ -137,8 +137,8 @@ EventManager.get_instance().add_event(Event.TimeChanged, ustawPrzestawionyCzas)
 EventManager.get_instance().add_event(Event.TimeChanged, ustawPrzestawionyPasek)
 
 try:
-    player.current_playlist = playlist
-    player.play_track()
+    # player.current_playlist = playlist
+    # player.play_track()
     while True:
         c = pasekPostepu.getch()
         if c == 65:  # strzałka w górę
