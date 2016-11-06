@@ -181,7 +181,12 @@ try:
             stderr.flush()
             break
         elif c == 68:
-            player.set_time(5)
+            player.decrease_time()
+        elif c == 67:
+            player.increase_time()
+        # stderr.write(u"Żyję!\n")
+        stderr.flush()
+
 except KeyboardInterrupt:
     pass
 finally:

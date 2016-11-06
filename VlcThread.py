@@ -4,7 +4,7 @@ import time
 from EventManager import *
 from Event import *
 from Player import *
-
+from sys import stderr
 
 class VlcThread(threading.Thread):
     def __init__(self, player):
@@ -18,6 +18,7 @@ class VlcThread(threading.Thread):
         while True:
             with self.player.rlock:
                 a = p.get_media().get_state()
+
                 if a == 6:
                     track = self.player.current_playlist.next()
                     p = vlc.MediaPlayer(str(track))
@@ -68,10 +69,13 @@ class VlcThread(threading.Thread):
                         p.stop()
                         EventManager.get_instance().trigger_event(Event.MediaStopped)
                     elif op == Ops.TimeChanged:
-                        p.set_position(self.player.time / track["length"])
+                        p.set_position(self.player._time / track["length"])
                         EventManager.get_instance().trigger_event(Event.TimeChanged,
                                                                   {"time": self.player.time, "length": track["length"]})
-
+                if p.is_playing():
+                    self.player._time = int(p.get_position() * track["length"])
+                    stderr.write("{}\n".format(self.player.time))
+                    stderr.flush()
                         # EventManager.get_instance().trigger_event(Event.Event.MediaEnded)
             try:
                 self.player.lock.release()

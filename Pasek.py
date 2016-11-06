@@ -20,7 +20,7 @@ class Pasek(threading.Thread):
 
     def run(self):
         while True:
-
+            sys.stderr.flush()
             with Pasek.var:
                 (wysokoscPasek, szerokoscPasek) = Pasek.pasekPostepu.getmaxyx()
                 if (Pasek.dzialanie == Ops.NoOp) or (Pasek.dzialanie == Ops.Pause):

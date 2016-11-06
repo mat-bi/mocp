@@ -7,12 +7,13 @@ class Player(object):
     _instance = None
     rlock = threading.RLock()
     lock = threading.Lock()
-    time = 0
+
 
     def __init__(self):
         # self.mediaplayer.event_manager().event_attach(vlc.EventType.MediaPlayerEndReached, self.next)
         self._current_playlist = Playlist([])
         self._op = Ops.Done
+        self._time = 0
         EventManager.get_instance()
         thread = VlcThread(self)
         thread.setDaemon(True)
@@ -21,6 +22,28 @@ class Player(object):
     def wait(self):
         self.lock.acquire()
         self.lock.acquire()
+
+    def decrease_time(self):
+        self.time -= 3
+
+    def increase_time(self):
+        self.time += 3
+
+    @property
+    def time(self):
+        with self.rlock:
+            return self._time
+
+    @time.setter
+    def time(self, time):
+        with self.rlock:
+            if time > self.current_playlist.current()["length"]:
+                time = self.current_playlist.current()["length"]
+            if time < 0:
+                time = 0
+            self._op = Ops.TimeChanged
+            self._time = time
+        self.wait()
 
     @staticmethod
     def get_instance():
@@ -89,15 +112,4 @@ class Player(object):
         with self.rlock:
             return self._op
 
-    def set_time(self, setTime):
-        with self.rlock:
-            self._op = Ops.TimeChanged
-            if setTime > 0:
-                self.time = setTime
-            else:
-                self.time = 0
-        self.wait()
 
-    def get_time(self):
-        with self.rlock:
-            return self.time
