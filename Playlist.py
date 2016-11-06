@@ -1,6 +1,9 @@
 import threading
 from Track import Track
 from sys import stderr
+import Player
+import random
+import time
 
 
 class Playlist():
@@ -49,22 +52,30 @@ class Playlist():
                 self._index = 0
             return self._current
 
-    def next(self):
+    def next(self, opt):
         with self.rlock:
-
-            if self._index == len(self._list) - 1:
+            if opt == Player.Player_Ops.RepeatTrack:
+                pass
+            elif opt == Player.Player_Ops.RepeatPlaylist and self._index == len(self._list) - 1:
+                self._index = 0
+                self._current = self._list[0]
+            elif opt == Player.Player_Ops.Normal and self._index == len(self._list) - 1:
                 self._current = None
+            elif opt == Player.Player_Ops.RandomTrack:
+                self._index = random.randint(0, len(self._list) - 1)
+                self._current = self._list[self._index]
             else:
                 self._current = self._list[self._index + 1]
             return self.current()
 
     def previous(self):
         with self.rlock:
-            index = self._list.index(self._current)
-            if index == 0:
-                self._current = None
+            if self._index > 0:
+                self._index -= 1
+                self._current = self._list[self._index]
             else:
-                self._current = self._list[index - 1]
+                self._index = 0
+                self._current = self._list[0]
             return self.current()
 
     def selected(self, number):

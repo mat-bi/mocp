@@ -1,13 +1,29 @@
 from VlcThread import *
 from Playlist import *
 from Ops import *
+from enum import Enum
+
+
+class Player_Ops(Enum):
+    RepeatTrack = 0
+    RepeatPlaylist = 1
+    RandomTrack = 2
+    Normal = 3
 
 
 class Player(object):
+    _playlist_opt = Player_Ops.RandomTrack
     _instance = None
     rlock = threading.RLock()
     lock = threading.Lock()
 
+    @property
+    def playlist_opt(self):
+        return self._playlist_opt
+
+    @playlist_opt.setter
+    def playlist_opt(self, opt):
+        self._playlist_opt = opt
 
     def __init__(self):
         # self.mediaplayer.event_manager().event_attach(vlc.EventType.MediaPlayerEndReached, self.next)
@@ -117,5 +133,3 @@ class Player(object):
     def stan(self):
         with self.rlock:
             return self._op
-
-

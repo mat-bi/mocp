@@ -24,7 +24,7 @@ class VlcThread(threading.Thread):
                     track = self.player.current_playlist.current()
                     p = vlc.MediaPlayer(str(track))
                 elif a == 6:
-                    track = self.player.current_playlist.next()
+                    track = self.player.current_playlist.next(self.player.playlist_opt)
                     p = vlc.MediaPlayer(str(track))
                     if track is None:
                         EventManager.get_instance().trigger_event(Event.PlaylistEnded)

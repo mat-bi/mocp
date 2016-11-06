@@ -6,6 +6,8 @@ import time
 import locale
 import os
 import sys
+import random
+
 
 from Player import Player
 from Playlist import Playlist
@@ -17,6 +19,7 @@ from Czas import *
 from Pasek import *
 from Okno import *
 
+random.seed(time.time())
 locale.setlocale(locale.LC_ALL, "")
 
 # os.close(2)
