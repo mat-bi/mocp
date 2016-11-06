@@ -15,6 +15,8 @@ class Playlist():
             else:
                 list.append(Track(i))
         self._list = list
+        # stderr.write(str(list))
+        # stderr.flush()
         self._current = None
         self._index = 0
         '''if len(lista) > 0:

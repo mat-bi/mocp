@@ -12,7 +12,7 @@ class Player_Ops(Enum):
 
 
 class Player(object):
-    _playlist_opt = Player_Ops.RandomTrack
+    _playlist_opt = Player_Ops.Normal
     _instance = None
     rlock = threading.RLock()
     lock = threading.Lock()

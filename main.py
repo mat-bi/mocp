@@ -186,6 +186,8 @@ try:
                     wyswietlPliki(leweOkno, lista, kontroler)
                 elif os.path.isfile(lista[kontroler]) and czyMuzyczny(lista[kontroler]):
                     listaOdtw = wybierzMuzyczne(lista[kontroler:len(lista) + 1])
+                    # stderr.write(str(listaOdtw) + '\n')
+                    # stderr.flush()
                     playlista = Playlist(listaOdtw)
                     player.stop_track()
                     player.current_playlist = playlista

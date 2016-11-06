@@ -1,5 +1,6 @@
 from mutagen.easyid3 import EasyID3
 from mutagen import File
+import os
 
 
 class Track:
@@ -8,7 +9,7 @@ class Track:
         try:
             self.info = EasyID3(path)
         except:
-            self.info = {"artist": "Nieznany wykonawca", "title": "Nieznany tytul"}
+            self.info = {"artist": "Nieznany wykonawca", "title": os.path.basename(path)}
         self.length = File(path).info.length
 
     @property
@@ -38,7 +39,7 @@ class Track:
         elif item == "title":
             if isinstance(self.info, EasyID3):
                 if self.info.get("title") is None:
-                    return [u"Nieznany tytuł"]
+                    return str(os.path.basename(self._path))
                 else:
                     return self.info.get("title")
             else:
