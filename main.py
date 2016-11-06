@@ -19,8 +19,8 @@ from Okno import *
 
 locale.setlocale(locale.LC_ALL, "")
 
-os.close(2)
-os.open("/dev/null", os.O_WRONLY)
+# os.close(2)
+# os.open("/dev/null", os.O_WRONLY)
 okno = curses.initscr()
 curses.curs_set(0)
 curses.noecho()
@@ -108,7 +108,8 @@ os.chdir(os.path.expanduser('~'))
 leweOkno = curses.newpad(wysokoscOkna - 2, srodek - 2)
 (wysokoscLeweOkno, szerokoscLeweOkno) = leweOkno.getmaxyx()
 praweOkno = curses.newpad(wysokoscOkna - 2, srodek - 2)
-(wysokoscPraweOkno, szerokoscPraweOkno) = leweOkno.getmaxyx()
+(wysokoscPraweOkno, szerokoscPraweOkno) = praweOkno.getmaxyx()
+# refreshPrawe(praweOkno, wysokoscPraweOkno, szerokoscOkna, srodek)
 kontroler = 0
 listaPom = [os.pardir] + os.listdir(os.curdir)
 lista = filtrujListe(listaPom)
@@ -143,17 +144,30 @@ EventManager.get_instance().add_event(Event.TimeChanged, ustawPrzestawionyPasek)
 try:
     # player.current_playlist = playlist
     # player.play_track()
+    glownaPlaylista = []
+    kontrolerPrawy = 0
+    przelacznikKontrolera = 0
     while True:
         c = pasekPostepu.getch()
         if c == 65:  # strzałka w górę
-            if kontroler > 0:
-                kontroler -= 1
-                wyswietlPliki(leweOkno, lista, kontroler)
+            if przelacznikKontrolera == 0:
+                if kontroler > 0:
+                    kontroler -= 1
+                    wyswietlPliki(leweOkno, lista, kontroler)
+            elif przelacznikKontrolera == 1:
+                if kontrolerPrawy > 0:
+                    kontrolerPrawy -= 1
+                    wyswietlPlayliste(praweOkno, glownaPlaylista, kontrolerPrawy, srodek, szerokoscOkna)
         elif c == 66:  # strzałka w dół
-            if not kontroler >= len(lista) - 1:
-                kontroler += 1
-                wyswietlPliki(leweOkno, lista, kontroler)
-        elif c == 10:  # Enter
+            if przelacznikKontrolera == 0:
+                if not kontroler >= len(lista) - 1:
+                    kontroler += 1
+                    wyswietlPliki(leweOkno, lista, kontroler)
+            elif przelacznikKontrolera == 1:
+                if not kontrolerPrawy >= len(glownaPlaylista) - 1:
+                    kontrolerPrawy += 1
+                    wyswietlPlayliste(praweOkno, glownaPlaylista, kontrolerPrawy, srodek, szerokoscOkna)
+        elif c == 10 and przelacznikKontrolera == 0:  # Enter
             if os.path.isdir(lista[kontroler]):
                 os.chdir(lista[kontroler])
                 listaPom = [os.pardir] + os.listdir(os.curdir)
@@ -187,10 +201,26 @@ try:
             player.decrease_time()
         elif c == 67:
             player.increase_time()
-        elif c >= 48 and c <= 57:
+        elif 48 <= c <= 57:
             player.selected_track(c - 48)
             player.stop_track()
             player.play_track()
+        elif c == 97 and przelacznikKontrolera == 0:  # litera "a" - dodanie utworu/katalogu do playlisty
+            if czyMuzyczny(lista[kontroler]):
+                glownaPlaylista.append(os.path.abspath(lista[kontroler]))
+                wyswietlPlayliste(praweOkno, glownaPlaylista, -1, srodek, szerokoscOkna)
+            if kontroler + 1 < len(lista):
+                kontroler += 1
+                wyswietlPliki(leweOkno, lista, kontroler)
+        elif c == 9:  # tabulator - przechodzenie między wirtualnymi oknami
+            if przelacznikKontrolera == 0:
+                przelacznikKontrolera = 1
+                wyswietlPliki(leweOkno, lista, -1)
+                wyswietlPlayliste(praweOkno, glownaPlaylista, kontrolerPrawy, srodek, szerokoscOkna)
+            elif przelacznikKontrolera == 1:
+                przelacznikKontrolera = 0
+                wyswietlPliki(leweOkno, lista, kontroler)
+                wyswietlPlayliste(praweOkno, glownaPlaylista, -1, srodek, szerokoscOkna)
         # stderr.write(u"Żyję!\n")
         stderr.flush()
 
