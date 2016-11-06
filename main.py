@@ -144,7 +144,7 @@ EventManager.get_instance().add_event(Event.TimeChanged, ustawPrzestawionyPasek)
 try:
     # player.current_playlist = playlist
     # player.play_track()
-    glownaPlaylista = []
+    glownaPlaylista = Playlist([])
     kontrolerPrawy = 0
     przelacznikKontrolera = 0
     while True:
@@ -188,7 +188,7 @@ try:
                     pass
             elif przelacznikKontrolera == 1:
                 player.stop_track()
-                player.current_playlist = Playlist(glownaPlaylista)
+                player.current_playlist = glownaPlaylista
                 player.selected_track(kontrolerPrawy)
                 player.stop_track()
                 player.play_track()
@@ -214,14 +214,14 @@ try:
             player.play_track()
         elif c == 97 and przelacznikKontrolera == 0:  # litera "a" - dodanie utworu/katalogu do playlisty
             if czyMuzyczny(lista[kontroler]):
-                glownaPlaylista.append(os.path.abspath(lista[kontroler]))
+                glownaPlaylista.add_track(os.path.abspath(lista[kontroler]))
                 wyswietlPlayliste(praweOkno, glownaPlaylista, -1, srodek, szerokoscOkna)
             if kontroler + 1 < len(lista):
                 kontroler += 1
                 wyswietlPliki(leweOkno, lista, kontroler)
         elif c == 100 and przelacznikKontrolera == 1:   # litera "d" - usunięcie utworu z playlisty
-            # TUTAJ TRZEBA ZROBIĆ USUWANIE UTWORU Z RZECZYWISTEJ PLAYLISTY, PÓKI CO USUWA TYLKO Z WYŚWIETLANIA
-            glownaPlaylista.remove(glownaPlaylista[kontrolerPrawy])
+            # TUTAJ TRZEBA ZROBIĆ USUWANIE UTWORU Z RZECZYWISTEJ PLAYLISTY, PÓKI CO USUWA TYLKO Z WYŚWIETLANIA - Zrobione
+            glownaPlaylista.remove_track(track=glownaPlaylista[kontrolerPrawy])
             if len(glownaPlaylista) == 0:
                 przelacznikKontrolera = 0
                 praweOkno.clear()
