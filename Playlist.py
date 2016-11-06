@@ -63,10 +63,24 @@ class Playlist():
             return self.current()
 
     def __len__(self):
-        return len(self._list)
+        with self.rlock:
+            return len(self._list)
 
     def __iter__(self):
-        return iter(self._list)
+        with self.rlock:
+            return iter(self._list)
+
+    def track_change_place(self, track, number):
+        with self.rlock:
+            t = self._list[track]
+            self._list[track] = None
+            self._list.insert(number, t)
+            self._list.remove(None)
 
     def __getitem__(self, item):
-        return self._list[item]
+        with self.rlock:
+            return self._list[item]
+
+    def __setitem__(self, key, value):
+        with self.rlock:
+            self._list[key] = value

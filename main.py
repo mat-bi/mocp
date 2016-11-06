@@ -232,12 +232,14 @@ try:
             wyswietlPlayliste(praweOkno, glownaPlaylista, kontrolerPrawy, srodek, szerokoscOkna)
         elif c == 117 and przelacznikKontrolera == 1:   # litera "u" - przesunięcie utworu w górę listy
             if kontrolerPrawy > 0:
-                glownaPlaylista[kontrolerPrawy - 1], glownaPlaylista[kontrolerPrawy] = glownaPlaylista[kontrolerPrawy], glownaPlaylista[kontrolerPrawy - 1]
+                # glownaPlaylista[kontrolerPrawy - 1], glownaPlaylista[kontrolerPrawy] = glownaPlaylista[kontrolerPrawy], glownaPlaylista[kontrolerPrawy - 1]
+                glownaPlaylista.track_change_place(kontrolerPrawy, kontrolerPrawy - 1)
                 kontrolerPrawy -= 1
                 wyswietlPlayliste(praweOkno, glownaPlaylista, kontrolerPrawy, srodek, szerokoscOkna)
         elif c == 106 and przelacznikKontrolera == 1:  # litera "j" - przesunięcie utworu w dół listy
             if kontrolerPrawy < len(glownaPlaylista) - 1:
-                glownaPlaylista[kontrolerPrawy + 1], glownaPlaylista[kontrolerPrawy] = glownaPlaylista[kontrolerPrawy], glownaPlaylista[kontrolerPrawy + 1]
+                # glownaPlaylista[kontrolerPrawy + 1], glownaPlaylista[kontrolerPrawy] = glownaPlaylista[kontrolerPrawy], glownaPlaylista[kontrolerPrawy + 1]
+                glownaPlaylista.track_change_place(kontrolerPrawy + 1, kontrolerPrawy)
                 kontrolerPrawy += 1
                 wyswietlPlayliste(praweOkno, glownaPlaylista, kontrolerPrawy, srodek, szerokoscOkna)
         elif c == 9:  # tabulator - przechodzenie między wirtualnymi oknami
