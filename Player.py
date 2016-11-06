@@ -62,6 +62,10 @@ class Player(object):
         with self.rlock:
             return self._volume
 
+    def selected_track(self, number):
+        with self.rlock:
+            return self.current_playlist.selected(number)
+
     @volume.setter
     def volume(self, value):
         with self.rlock:

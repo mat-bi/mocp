@@ -38,7 +38,13 @@ class VlcThread(threading.Thread):
                 else:
                     op = self.player._op
                     self.player._op = Ops.Done
-                    if op == Ops.Play and a != 3:
+                    if op == Ops.Play and track != self.player.current_playlist.current():
+                        track = self.player.current_playlist.current()
+                        p = vlc.MediaPlayer(str(track))
+                        p.play()
+                        EventManager.get_instance().trigger_event(Event.MediaStarted, {"title": track["title"],
+                                                                                       "length": track["length"]})
+                    elif op == Ops.Play and a != 3:
                         if a != 4:
                             track = self.player.current_playlist.current()
                             p = vlc.MediaPlayer(str(track))
@@ -72,10 +78,6 @@ class VlcThread(threading.Thread):
                         p.set_position(self.player._time / track["length"])
                         EventManager.get_instance().trigger_event(Event.TimeChanged,
                                                                   {"time": self.player.time, "length": track["length"]})
-                if p.is_playing():
-                    self.player._time = int(p.get_position() * track["length"])
-                    stderr.write("{}\n".format(self.player.time))
-                    stderr.flush()
                         # EventManager.get_instance().trigger_event(Event.Event.MediaEnded)
             try:
                 self.player.lock.release()

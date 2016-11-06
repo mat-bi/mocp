@@ -184,6 +184,10 @@ try:
             player.decrease_time()
         elif c == 67:
             player.increase_time()
+        elif c >= 48 and c <= 57:
+            player.selected_track(c - 48)
+            player.stop_track()
+            player.play_track()
         # stderr.write(u"Żyję!\n")
         stderr.flush()
 

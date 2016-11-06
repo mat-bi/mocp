@@ -51,3 +51,8 @@ class Playlist():
             else:
                 self._current = self._list[index - 1]
             return self.current()
+
+    def selected(self, number):
+        with self.rlock:
+            self._current = self._list[number]
+            return self.current()
