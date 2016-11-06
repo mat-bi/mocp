@@ -5,6 +5,7 @@ import curses
 import time
 import locale
 import os
+import sys
 
 from Player import Player
 from Playlist import Playlist
@@ -18,6 +19,8 @@ from Okno import *
 
 locale.setlocale(locale.LC_ALL, "")
 
+os.close(2)
+os.open("/dev/null", os.O_WRONLY)
 okno = curses.initscr()
 curses.curs_set(0)
 curses.noecho()
