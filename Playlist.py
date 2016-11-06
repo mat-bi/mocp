@@ -13,6 +13,7 @@ class Playlist():
                 list.append(Track(i))
         self._list = list
         self._current = None
+        self._index = 0
         '''if len(lista) > 0:
             self._current = self._list[0]
         else:
@@ -32,23 +33,29 @@ class Playlist():
     def remove_track(self, track=None, number=None):
         with self.rlock:
             if isinstance(track, Track):
+                ind = self._list.index(track)
+                if ind < self._index:
+                    self._index -= 1
                 self._list.remove(track)
             elif isinstance(number, int):
+                if number < self._index:
+                    self._index -= 1
                 del self._list[number]
 
     def current(self):
         with self.rlock:
             if self._current is None and len(self._list) > 0:
                 self._current = self._list[0]
+                self._index = 0
             return self._current
 
     def next(self):
         with self.rlock:
-            index = self._list.index(self._current)
-            if index == len(self._list) - 1:
+
+            if self._index == len(self._list) - 1:
                 self._current = None
             else:
-                self._current = self._list[index + 1]
+                self._current = self._list[self._index + 1]
             return self.current()
 
     def previous(self):
