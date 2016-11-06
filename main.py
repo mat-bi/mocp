@@ -178,7 +178,7 @@ try:
                     os.chdir(lista[kontroler])
                     listaPom = [os.pardir] + os.listdir(os.curdir)
                     lista = filtrujListe(listaPom)
-                    if kontroler == 0:
+                    if kontroler == 0 and len(stosKatalogow) > 0:
                         kontroler = stosKatalogow.pop()
                     else:
                         stosKatalogow.append(kontroler)
