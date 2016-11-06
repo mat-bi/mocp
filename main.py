@@ -167,7 +167,7 @@ try:
                 if not kontrolerPrawy >= len(glownaPlaylista) - 1:
                     kontrolerPrawy += 1
                     wyswietlPlayliste(praweOkno, glownaPlaylista, kontrolerPrawy, srodek, szerokoscOkna)
-        elif c == 10: # Enter
+        elif c == 10:  # Enter
             if przelacznikKontrolera == 0:
                 if os.path.isdir(lista[kontroler]):
                     os.chdir(lista[kontroler])
@@ -222,18 +222,23 @@ try:
         elif c == 100 and przelacznikKontrolera == 1:   # litera "d" - usunięcie utworu z playlisty
             # TUTAJ TRZEBA ZROBIĆ USUWANIE UTWORU Z RZECZYWISTEJ PLAYLISTY, PÓKI CO USUWA TYLKO Z WYŚWIETLANIA
             glownaPlaylista.remove(glownaPlaylista[kontrolerPrawy])
-            if kontrolerPrawy >= len(glownaPlaylista):
+            if len(glownaPlaylista) == 0:
+                przelacznikKontrolera = 0
+                praweOkno.clear()
+                refreshPrawe(praweOkno, wysokoscPraweOkno, szerokoscOkna, srodek)
+                wyswietlPliki(leweOkno, lista, kontroler)
+            elif kontrolerPrawy >= len(glownaPlaylista):
                 kontrolerPrawy -= 1
             wyswietlPlayliste(praweOkno, glownaPlaylista, kontrolerPrawy, srodek, szerokoscOkna)
         elif c == 117 and przelacznikKontrolera == 1:   # litera "u" - przesunięcie utworu w górę listy
             if kontrolerPrawy > 0:
                 glownaPlaylista[kontrolerPrawy - 1], glownaPlaylista[kontrolerPrawy] = glownaPlaylista[kontrolerPrawy], glownaPlaylista[kontrolerPrawy - 1]
-                kontrolerPrawy -= 1;
+                kontrolerPrawy -= 1
                 wyswietlPlayliste(praweOkno, glownaPlaylista, kontrolerPrawy, srodek, szerokoscOkna)
         elif c == 106 and przelacznikKontrolera == 1:  # litera "j" - przesunięcie utworu w dół listy
             if kontrolerPrawy < len(glownaPlaylista) - 1:
                 glownaPlaylista[kontrolerPrawy + 1], glownaPlaylista[kontrolerPrawy] = glownaPlaylista[kontrolerPrawy], glownaPlaylista[kontrolerPrawy + 1]
-                kontrolerPrawy += 1;
+                kontrolerPrawy += 1
                 wyswietlPlayliste(praweOkno, glownaPlaylista, kontrolerPrawy, srodek, szerokoscOkna)
         elif c == 9:  # tabulator - przechodzenie między wirtualnymi oknami
             if przelacznikKontrolera == 0 and len(glownaPlaylista) > 0:
@@ -244,6 +249,20 @@ try:
                 przelacznikKontrolera = 0
                 wyswietlPliki(leweOkno, lista, kontroler)
                 wyswietlPlayliste(praweOkno, glownaPlaylista, -1, srodek, szerokoscOkna)
+        elif c == 72:   # klawisz "Home" - przejście na początek listy
+            if przelacznikKontrolera == 0:
+                kontroler = 0
+                wyswietlPliki(leweOkno, lista, kontroler)
+            elif przelacznikKontrolera == 1:
+                kontrolerPrawy = 0
+                wyswietlPlayliste(praweOkno, glownaPlaylista, kontrolerPrawy, srodek, szerokoscOkna)
+        elif c == 70:  # klawisz "End" - przejście na koniec listy
+            if przelacznikKontrolera == 0:
+                kontroler = len(lista) - 1
+                wyswietlPliki(leweOkno, lista, kontroler)
+            elif przelacznikKontrolera == 1:
+                kontrolerPrawy = len(glownaPlaylista) - 1
+                wyswietlPlayliste(praweOkno, glownaPlaylista, kontrolerPrawy, srodek, szerokoscOkna)
         # stderr.write(u"Żyję!\n")
         stderr.flush()
 
