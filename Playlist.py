@@ -67,7 +67,8 @@ class Playlist():
                 self._index = random.randint(0, len(self._list) - 1)
                 self._current = self._list[self._index]
             else:
-                self._current = self._list[self._index + 1]
+                self._index += 1
+                self._current = self._list[self._index]
             return self.current()
 
     def previous(self):
