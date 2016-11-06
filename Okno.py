@@ -27,9 +27,16 @@ def wyswietlPliki(pad, lista, kontroler):
             if pom * pojemnosc <= i < (pom + 1) * pojemnosc:
                 pad.move(i % pojemnosc, 0)
                 if i == kontroler:
-                    pad.addstr(str(x)[0:szer - 1], curses.A_STANDOUT)
+                    if os.path.isdir(x):
+                        pad.addstr(str(x)[0:szer - 1], curses.A_STANDOUT | curses.A_BOLD)
+                    else:
+                        pad.addstr(str(x)[0:szer - 1], curses.A_STANDOUT)
                 else:
-                    pad.addstr(str(x)[0:szer - 1])
+                    if os.path.isdir(x):
+                        pad.addstr(str(x)[0:szer - 1], curses.A_BOLD)
+                    else:
+                        pad.addstr(str(x)[0:szer - 1])
+
             i += 1
         refresh(pad, wys, szer)
 
@@ -55,12 +62,18 @@ def wyswietlPlayliste(pad, lista, kontroler, srodek, szerokosc):
 
 
 def filtrujListe(lista):
-    nowaLista = []
+    katalogi = []
+    pliki = []
     for x in lista:
-        if (os.path.isdir(x) or czyMuzyczny(x)) and (not x.startswith(".") or x.startswith("..")):
-            nowaLista += [x]
+        if (os.path.isdir(x)) and (not x.startswith(".") or x.startswith("..")):
+            katalogi += [x]
+        elif czyMuzyczny(x):
+            pliki += [x]
 
-    nowaLista.sort()
+    katalogi = sorted(katalogi, key=str.lower)
+    pliki = sorted(pliki, key=str.lower)
+
+    nowaLista = katalogi + pliki
 
     return nowaLista
 
