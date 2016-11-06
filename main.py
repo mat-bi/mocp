@@ -167,24 +167,30 @@ try:
                 if not kontrolerPrawy >= len(glownaPlaylista) - 1:
                     kontrolerPrawy += 1
                     wyswietlPlayliste(praweOkno, glownaPlaylista, kontrolerPrawy, srodek, szerokoscOkna)
-        elif c == 10 and przelacznikKontrolera == 0:  # Enter
-            if os.path.isdir(lista[kontroler]):
-                os.chdir(lista[kontroler])
-                listaPom = [os.pardir] + os.listdir(os.curdir)
-                lista = filtrujListe(listaPom)
-                if kontroler == 0:
-                    kontroler = stosKatalogow.pop()
-                else:
-                    stosKatalogow.append(kontroler)
-                    kontroler = 0
-                wyswietlPliki(leweOkno, lista, kontroler)
-            elif os.path.isfile(lista[kontroler]) and czyMuzyczny(lista[kontroler]):
-                listaOdtw = wybierzMuzyczne(lista[kontroler:len(lista) + 1])
-                playlista = Playlist(listaOdtw)
+        elif c == 10: # Enter
+            if przelacznikKontrolera == 0:
+                if os.path.isdir(lista[kontroler]):
+                    os.chdir(lista[kontroler])
+                    listaPom = [os.pardir] + os.listdir(os.curdir)
+                    lista = filtrujListe(listaPom)
+                    if kontroler == 0:
+                        kontroler = stosKatalogow.pop()
+                    else:
+                        stosKatalogow.append(kontroler)
+                        kontroler = 0
+                    wyswietlPliki(leweOkno, lista, kontroler)
+                elif os.path.isfile(lista[kontroler]) and czyMuzyczny(lista[kontroler]):
+                    listaOdtw = wybierzMuzyczne(lista[kontroler:len(lista) + 1])
+                    playlista = Playlist(listaOdtw)
+                    player.stop_track()
+                    player.current_playlist = playlista
+                    player.play_track()
+                    pass
+            elif przelacznikKontrolera == 1:
                 player.stop_track()
-                player.current_playlist = playlista
+                player.current_playlist = Playlist(glownaPlaylista)
+                player.selected_track(kontrolerPrawy)
                 player.play_track()
-                pass
         elif c == 115:  # zatrzymanie odtwarzania (znak "s")
             player.stop_track()
             with funkcje.curses_mutex:
