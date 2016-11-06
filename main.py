@@ -190,6 +190,7 @@ try:
                 player.stop_track()
                 player.current_playlist = Playlist(glownaPlaylista)
                 player.selected_track(kontrolerPrawy)
+                player.stop_track()
                 player.play_track()
         elif c == 115:  # zatrzymanie odtwarzania (znak "s")
             player.stop_track()
