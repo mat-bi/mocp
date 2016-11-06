@@ -219,8 +219,24 @@ try:
             if kontroler + 1 < len(lista):
                 kontroler += 1
                 wyswietlPliki(leweOkno, lista, kontroler)
+        elif c == 100 and przelacznikKontrolera == 1:   # litera "d" - usunięcie utworu z playlisty
+            # TUTAJ TRZEBA ZROBIĆ USUWANIE UTWORU Z RZECZYWISTEJ PLAYLISTY, PÓKI CO USUWA TYLKO Z WYŚWIETLANIA
+            glownaPlaylista.remove(glownaPlaylista[kontrolerPrawy])
+            if kontrolerPrawy >= len(glownaPlaylista):
+                kontrolerPrawy -= 1
+            wyswietlPlayliste(praweOkno, glownaPlaylista, kontrolerPrawy, srodek, szerokoscOkna)
+        elif c == 117 and przelacznikKontrolera == 1:   # litera "u" - przesunięcie utworu w górę listy
+            if kontrolerPrawy > 0:
+                glownaPlaylista[kontrolerPrawy - 1], glownaPlaylista[kontrolerPrawy] = glownaPlaylista[kontrolerPrawy], glownaPlaylista[kontrolerPrawy - 1]
+                kontrolerPrawy -= 1;
+                wyswietlPlayliste(praweOkno, glownaPlaylista, kontrolerPrawy, srodek, szerokoscOkna)
+        elif c == 106 and przelacznikKontrolera == 1:  # litera "j" - przesunięcie utworu w dół listy
+            if kontrolerPrawy < len(glownaPlaylista) - 1:
+                glownaPlaylista[kontrolerPrawy + 1], glownaPlaylista[kontrolerPrawy] = glownaPlaylista[kontrolerPrawy], glownaPlaylista[kontrolerPrawy + 1]
+                kontrolerPrawy += 1;
+                wyswietlPlayliste(praweOkno, glownaPlaylista, kontrolerPrawy, srodek, szerokoscOkna)
         elif c == 9:  # tabulator - przechodzenie między wirtualnymi oknami
-            if przelacznikKontrolera == 0:
+            if przelacznikKontrolera == 0 and len(glownaPlaylista) > 0:
                 przelacznikKontrolera = 1
                 wyswietlPliki(leweOkno, lista, -1)
                 wyswietlPlayliste(praweOkno, glownaPlaylista, kontrolerPrawy, srodek, szerokoscOkna)
