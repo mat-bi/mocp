@@ -18,8 +18,12 @@ class VlcThread(threading.Thread):
         while True:
             with self.player.rlock:
                 a = p.get_media().get_state()
-
-                if a == 6:
+                if self.player._op == Ops.ChangeTrack:
+                    self.player._op = Ops.Done
+                    p.stop()
+                    track = self.player.current_playlist.current()
+                    p = vlc.MediaPlayer(str(track))
+                elif a == 6:
                     track = self.player.current_playlist.next()
                     p = vlc.MediaPlayer(str(track))
                     if track is None:

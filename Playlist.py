@@ -12,10 +12,11 @@ class Playlist():
             else:
                 list.append(Track(i))
         self._list = list
-        if len(lista) > 0:
+        self._current = None
+        '''if len(lista) > 0:
             self._current = self._list[0]
         else:
-            self._current = None
+            self._current = None'''
         # stderr.write("{}\n".format(str(lista)))
         stderr.flush()
         self.rlock = threading.RLock()
@@ -37,6 +38,8 @@ class Playlist():
 
     def current(self):
         with self.rlock:
+            if self._current is None and len(self._list) > 0:
+                self._current = self._list[0]
             return self._current
 
     def next(self):

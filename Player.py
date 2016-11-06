@@ -64,7 +64,9 @@ class Player(object):
 
     def selected_track(self, number):
         with self.rlock:
-            return self.current_playlist.selected(number)
+            self.current_playlist.selected(number)
+            self._op = Ops.ChangeTrack
+        self.wait()
 
     @volume.setter
     def volume(self, value):
