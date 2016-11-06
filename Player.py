@@ -30,6 +30,7 @@ class Player(object):
         self._current_playlist = Playlist([])
         self._op = Ops.Done
         self._time = 0
+        self._changed_time = 0
         EventManager.get_instance()
         thread = VlcThread(self)
         thread.setDaemon(True)
@@ -58,7 +59,7 @@ class Player(object):
             if time < 0:
                 time = 0
             self._op = Ops.TimeChanged
-            self._time = time
+            self._changed_time = time
         self.wait()
 
     @staticmethod

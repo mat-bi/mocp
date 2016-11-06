@@ -63,6 +63,7 @@ class Playlist():
                 self._current = self._list[0]
             elif opt == Player.Player_Ops.Normal and self._index == len(self._list) - 1:
                 self._current = None
+                return self._current
             elif opt == Player.Player_Ops.RandomTrack:
                 self._index = random.randint(0, len(self._list) - 1)
                 self._current = self._list[self._index]
@@ -101,10 +102,10 @@ class Playlist():
             self._list.insert(number, t)
             self._list.remove(None)
 
-    def __getitem__(self, item):
+    '''def __getitem__(self, item):
         with self.rlock:
             return self._list[item]
 
     def __setitem__(self, key, value):
         with self.rlock:
-            self._list[key] = value
+            self._list[key] = value'''

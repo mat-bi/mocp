@@ -70,9 +70,12 @@ class Pasek(threading.Thread):
                     Pasek.liczbaBlokow = pom
                     with funkcje.curses_mutex:
                         while i <= Pasek.liczbaBlokow:
-                            Pasek.pasekPostepu.move(0, i)
-                            Pasek.pasekPostepu.addstr(Pasek.blok.encode("utf-8"))
-                            i += 1
+                            try:
+                                Pasek.pasekPostepu.move(0, i)
+                                Pasek.pasekPostepu.addstr(Pasek.blok.encode("utf-8"))
+                                i += 1
+                            except:
+                                break
                         Pasek.pasekPostepu.refresh()
                     Pasek.dzialanie = Ops.Play
                     Pasek.var.wait(facet_wait)

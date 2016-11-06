@@ -12,6 +12,7 @@ class VlcThread(threading.Thread):
         self.player = player
 
     def run(self):
+        z = False
         instance = vlc.Instance()
         p = vlc.MediaPlayer(str(self.player.current_playlist.current()))
         track = self.player.current_playlist.current()
@@ -38,7 +39,8 @@ class VlcThread(threading.Thread):
                     EventManager.get_instance().trigger_event(Event.MediaStarted,
                                                               {"title": track["title"], "length": track["length"]})
                 elif self.player._op == Ops.NoOp or self.player._op == Ops.Done:
-                    pass
+                    if p.is_playing():
+                        self.player._time = int(p.get_position() * track["length"])
                 else:
                     op = self.player._op
                     self.player._op = Ops.Done
@@ -79,9 +81,17 @@ class VlcThread(threading.Thread):
                         p.stop()
                         EventManager.get_instance().trigger_event(Event.MediaStopped)
                     elif op == Ops.TimeChanged:
-                        p.set_position(self.player._time / track["length"])
-                        EventManager.get_instance().trigger_event(Event.TimeChanged,
-                                                                  {"time": self.player.time, "length": track["length"]})
+                        self.player._time = self.player._changed_time
+                        if track is None:
+                            pass
+                        elif (self.player._changed_time >= track["length"]):
+                            p.set_position(1.0)
+                            z = True
+                        else:
+                            p.set_position(self.player._changed_time / track["length"])
+                            EventManager.get_instance().trigger_event(Event.TimeChanged,
+                                                                      {"time": self.player._changed_time,
+                                                                       "length": track["length"]})
                         # EventManager.get_instance().trigger_event(Event.Event.MediaEnded)
             try:
                 self.player.lock.release()
