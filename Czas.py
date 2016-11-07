@@ -24,10 +24,13 @@ class Czas(threading.Thread):
 
     def rysuj(self, co):
         with funkcje.curses_mutex:
-            Czas.czas.clear()
-            Czas.czas.move(0, 0)
-            Czas.czas.addstr(co)
-            Czas.czas.refresh()
+            try:
+                Czas.czas.clear()
+                Czas.czas.move(0, 0)
+                Czas.czas.addstr(co)
+                Czas.czas.refresh()
+            except:
+                pass
 
     @staticmethod
     def number(number):

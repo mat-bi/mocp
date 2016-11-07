@@ -18,6 +18,10 @@ class VlcThread(threading.Thread):
         track = self.player.current_playlist.current()
         while True:
             with self.player.rlock:
+                try:
+                    self.player._time = int(p.get_position() * track["length"])
+                except:
+                    pass
                 a = p.get_media().get_state()
                 if self.player._op == Ops.ChangeTrack:
                     self.player._op = Ops.Done
@@ -25,6 +29,7 @@ class VlcThread(threading.Thread):
                     track = self.player.current_playlist.current()
                     p = vlc.MediaPlayer(str(track))
                 elif a == 6:
+                    self.player._time = 0
                     track = self.player.current_playlist.next(self.player.playlist_opt)
                     p = vlc.MediaPlayer(str(track))
                     if track is None:
@@ -39,8 +44,7 @@ class VlcThread(threading.Thread):
                     EventManager.get_instance().trigger_event(Event.MediaStarted,
                                                               {"title": track["title"], "length": track["length"]})
                 elif self.player._op == Ops.NoOp or self.player._op == Ops.Done:
-                    if p.is_playing():
-                        self.player._time = int(p.get_position() * track["length"])
+                    pass
                 else:
                     op = self.player._op
                     self.player._op = Ops.Done
