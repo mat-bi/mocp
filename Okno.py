@@ -78,6 +78,25 @@ def filtrujListe(lista):
     return nowaLista
 
 
+def wybierzMuzyczneRekurencyjnie(nazwa, wynik):
+    if os.path.isdir(nazwa):
+        os.chdir(nazwa)
+        for x in os.listdir(os.curdir):
+            wynik.append(wybierzMuzyczneRekurencyjnie(x, wynik))
+        os.chdir(os.pardir)
+    elif czyMuzyczny(nazwa):
+        wynik.append(os.path.abspath(nazwa))
+
+
+def wynikPrzefiltrowany(wynik):
+    nowyWynik = []
+    for x in wynik:
+        if x is not None:
+            nowyWynik.append(x)
+
+    return nowyWynik
+
+
 def wybierzMuzyczne(lista):
     nowaLista = []
     for x in lista:

@@ -227,6 +227,13 @@ try:
             if czyMuzyczny(lista[kontroler]):
                 glownaPlaylista.add_track(os.path.abspath(lista[kontroler]))
                 wyswietlPlayliste(praweOkno, glownaPlaylista, -1, srodek, szerokoscOkna)
+            elif os.path.isdir(lista[kontroler]):
+                doDodania = []
+                wybierzMuzyczneRekurencyjnie(lista[kontroler], doDodania)
+                for x in doDodania:
+                    if x is not None:
+                        glownaPlaylista.add_track(x)
+                wyswietlPlayliste(praweOkno, glownaPlaylista, -1, srodek, szerokoscOkna)
             if kontroler + 1 < len(lista):
                 kontroler += 1
                 wyswietlPliki(leweOkno, lista, kontroler)
@@ -298,7 +305,7 @@ try:
                 leweOkno.move(7, 0)
                 leweOkno.addstr("Enter - odtwarzanie wybranego utworu".encode("utf-8"))
                 leweOkno.move(8, 0)
-                leweOkno.addstr("Spacja - pauzowanie i wznawianie utworu".encode("utf-8"))
+                leweOkno.addstr("Spacja - pauza/wznowienie utworu".encode("utf-8"))
                 leweOkno.move(9, 0)
                 leweOkno.addstr("s - stop".encode("utf-8"))
                 leweOkno.move(10, 0)
@@ -308,7 +315,7 @@ try:
                 leweOkno.addstr("Lista odtwarzania:".encode("utf-8"), curses.A_UNDERLINE)
 
                 leweOkno.move(13, 0)
-                leweOkno.addstr("a - dodanie utworu do playlisty".encode("utf-8"))
+                leweOkno.addstr("a - dodanie utworu/katalogu do playlisty".encode("utf-8"))
                 leweOkno.move(14, 0)
                 leweOkno.addstr("d - usunięcie utworu z playlisty".encode("utf-8"))
                 leweOkno.move(15, 0)
