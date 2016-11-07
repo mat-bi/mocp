@@ -9,7 +9,10 @@ class Track:
         try:
             self.info = EasyID3(path)
         except:
-            self.info = {"artist": "Nieznany wykonawca", "title": os.path.basename(path)}
+            title = []
+            title.append(os.path.basename(path))
+
+            self.info = {"artist": ["Nieznany wykonawca"], "title": title}
         self.length = File(path).info.length
 
     @property
@@ -43,7 +46,7 @@ class Track:
                 else:
                     return self.info.get("title")
             else:
-                return [self.info["title"]]
+                return list(self.info["title"])
         else:
             return None
 

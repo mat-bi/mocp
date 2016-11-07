@@ -19,7 +19,11 @@ stop = u"■"
 def zmienTytul(
         args):  # ustawia tytuł bieżącego utworu w oknie wirtualnym "tytulUtworu" (przy zdarzeniu "MediaPlay")
     tytulUtworu = args["user"]
-    t = args["title"][0]
+    t = ""
+    if isinstance(args["title"], str):
+        t = args["title"]
+    else:
+        t = args["title"][0]
     with curses_mutex:
         tytulUtworu.clear()
         tytulUtworu.addstr(t)
