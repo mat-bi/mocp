@@ -232,7 +232,7 @@ try:
                 wyswietlPliki(leweOkno, lista, kontroler)
         elif c == 100 and przelacznikKontrolera == 1:  # litera "d" - usunięcie utworu z playlisty
             # TUTAJ TRZEBA ZROBIĆ USUWANIE UTWORU Z RZECZYWISTEJ PLAYLISTY, PÓKI CO USUWA TYLKO Z WYŚWIETLANIA - Zrobione
-            glownaPlaylista.remove_track(track=glownaPlaylista[kontrolerPrawy])
+            glownaPlaylista.remove_track(number=kontrolerPrawy)
             if len(glownaPlaylista) == 0:
                 przelacznikKontrolera = 0
                 praweOkno.clear()
