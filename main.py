@@ -8,7 +8,6 @@ import os
 import sys
 import random
 
-
 from Player import Player
 from Playlist import Playlist
 from Track import Track
@@ -105,6 +104,10 @@ ramkaDol.addstr(ramkaSrodekDol.encode("utf-8"))
 ramkaGora.refresh()
 ramkaDol.refresh()
 
+tytulUtworu.move(0, 0)
+tytulUtworu.addstr("Naciśnij \'h\', aby wyświetlić pomoc.".encode("utf-8"))
+tytulUtworu.refresh()
+
 player = Player.get_instance()
 # playlist = Playlist([])
 os.chdir(os.path.expanduser('~'))
@@ -152,6 +155,7 @@ try:
     glownaPlaylista = Playlist([])
     kontrolerPrawy = 0
     przelacznikKontrolera = 0
+    pamiecKontrolera = 0
     while True:
         c = pasekPostepu.getch()
         if c == 65:  # strzałka w górę
@@ -197,7 +201,7 @@ try:
                 player.stop_track()
                 player.current_playlist = glownaPlaylista
                 player.selected_track(kontrolerPrawy)
-                #player.stop_track()
+                # player.stop_track()
                 player.play_track()
         elif c == 115:  # zatrzymanie odtwarzania (znak "s")
             player.stop_track()
@@ -226,7 +230,7 @@ try:
             if kontroler + 1 < len(lista):
                 kontroler += 1
                 wyswietlPliki(leweOkno, lista, kontroler)
-        elif c == 100 and przelacznikKontrolera == 1:   # litera "d" - usunięcie utworu z playlisty
+        elif c == 100 and przelacznikKontrolera == 1:  # litera "d" - usunięcie utworu z playlisty
             # TUTAJ TRZEBA ZROBIĆ USUWANIE UTWORU Z RZECZYWISTEJ PLAYLISTY, PÓKI CO USUWA TYLKO Z WYŚWIETLANIA - Zrobione
             glownaPlaylista.remove_track(track=glownaPlaylista[kontrolerPrawy])
             if len(glownaPlaylista) == 0:
@@ -237,7 +241,7 @@ try:
             elif kontrolerPrawy >= len(glownaPlaylista):
                 kontrolerPrawy -= 1
             wyswietlPlayliste(praweOkno, glownaPlaylista, kontrolerPrawy, srodek, szerokoscOkna)
-        elif c == 117 and przelacznikKontrolera == 1:   # litera "u" - przesunięcie utworu w górę listy
+        elif c == 117 and przelacznikKontrolera == 1:  # litera "u" - przesunięcie utworu w górę listy
             if kontrolerPrawy > 0:
                 # glownaPlaylista[kontrolerPrawy - 1], glownaPlaylista[kontrolerPrawy] = glownaPlaylista[kontrolerPrawy], glownaPlaylista[kontrolerPrawy - 1]
                 glownaPlaylista.track_change_place(kontrolerPrawy, kontrolerPrawy - 1)
@@ -258,7 +262,7 @@ try:
                 przelacznikKontrolera = 0
                 wyswietlPliki(leweOkno, lista, kontroler)
                 wyswietlPlayliste(praweOkno, glownaPlaylista, -1, srodek, szerokoscOkna)
-        elif c == 72:   # klawisz "Home" - przejście na początek listy
+        elif c == 72:  # klawisz "Home" - przejście na początek listy
             if przelacznikKontrolera == 0:
                 kontroler = 0
                 wyswietlPliki(leweOkno, lista, kontroler)
@@ -272,6 +276,60 @@ try:
             elif przelacznikKontrolera == 1:
                 kontrolerPrawy = len(glownaPlaylista) - 1
                 wyswietlPlayliste(praweOkno, glownaPlaylista, kontrolerPrawy, srodek, szerokoscOkna)
+        elif c == 104:
+            if przelacznikKontrolera != 2:
+                pamiecKontrolera = przelacznikKontrolera
+                przelacznikKontrolera = 2
+                wyswietlPlayliste(praweOkno, glownaPlaylista,-1, srodek, szerokoscOkna)
+                leweOkno.clear()
+                leweOkno.move(0, 0)
+                leweOkno.addstr("POMOC")
+
+                leweOkno.move(2, 0)
+                leweOkno.addstr("Nawigacja:".encode("utf-8"), curses.A_UNDERLINE)
+                leweOkno.move(3, 0)
+                leweOkno.addstr("↑↓ - poruszanie się po katalogach i playliście".encode("utf-8"))
+                leweOkno.move(4, 0)
+                leweOkno.addstr("Tab - przechodzenie między katalogami a playlistą".encode("utf-8"))
+
+                leweOkno.move(6, 0)
+                leweOkno.addstr("Odtwarzanie:".encode("utf-8"), curses.A_UNDERLINE)
+
+                leweOkno.move(7, 0)
+                leweOkno.addstr("Enter - odtwarzanie wybranego utworu".encode("utf-8"))
+                leweOkno.move(8, 0)
+                leweOkno.addstr("Spacja - pauzowanie i wznawianie utworu".encode("utf-8"))
+                leweOkno.move(9, 0)
+                leweOkno.addstr("s - stop".encode("utf-8"))
+                leweOkno.move(10, 0)
+                leweOkno.addstr("←→ - przewijanie utworu".encode("utf-8"))
+
+                leweOkno.move(12, 0)
+                leweOkno.addstr("Lista odtwarzania:".encode("utf-8"), curses.A_UNDERLINE)
+
+                leweOkno.move(13, 0)
+                leweOkno.addstr("a - dodanie utworu do playlisty".encode("utf-8"))
+                leweOkno.move(14, 0)
+                leweOkno.addstr("d - usunięcie utworu z playlisty".encode("utf-8"))
+                leweOkno.move(15, 0)
+                leweOkno.addstr("u - przesunięcie utworu w górę listy".encode("utf-8"))
+                leweOkno.move(16, 0)
+                leweOkno.addstr("j - przesunięcie utworu w dół listy".encode("utf-8"))
+
+                leweOkno.move(18, 0)
+                leweOkno.addstr("Pozostałe:".encode("utf-8"), curses.A_UNDERLINE)
+                leweOkno.move(19, 0)
+                leweOkno.addstr("h - wyświetlanie/zamykanie tego tekstu pomocy".encode("utf-8"))
+
+                refresh(leweOkno, wysokoscLeweOkno, szerokoscLeweOkno)
+            elif przelacznikKontrolera == 2 and pamiecKontrolera == 0:
+                przelacznikKontrolera = 0
+                wyswietlPliki(leweOkno, lista, kontroler)
+            elif przelacznikKontrolera == 2 and pamiecKontrolera == 1:
+                przelacznikKontrolera = 1
+                wyswietlPliki(leweOkno, lista, -1)
+                wyswietlPlayliste(praweOkno, glownaPlaylista, kontrolerPrawy, srodek, szerokoscOkna)
+
         # stderr.write(u"Żyję!\n")
         stderr.flush()
 
